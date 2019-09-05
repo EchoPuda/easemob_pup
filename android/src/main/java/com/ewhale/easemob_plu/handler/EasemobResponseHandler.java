@@ -33,8 +33,16 @@ public class EasemobResponseHandler {
         channel.invokeMethod("msgSendState", states);
     }
 
+    public static void onLoginListener(String state) {
+        channel.invokeMethod("loginListener",state);
+    }
+
+    public static void onConversationGet(HashMap<String, HashMap<String, Object>> map) {
+        channel.invokeMethod("conversationGetListener",map);
+    }
+
     public static void onMessageReceived(List<EMMessage> messages){
-        List<Map<String, Object>> msgList = new ArrayList<>();
+        ArrayList<Map<String, Object>> msgList = new ArrayList<>();
         for (int i = 0; i < messages.size(); i++) {
             Map<String, Object> map = new HashMap<>();
             EMMessage.ChatType chatType = messages.get(i).getChatType();
@@ -84,6 +92,7 @@ public class EasemobResponseHandler {
             String toUser = messages.get(i).getTo();
             map.put("toUser",toUser);
             msgList.add(map);
+            map.put("time",messages.get(i).getMsgTime());
         }
         channel.invokeMethod("emMsgListener", msgList);
     }

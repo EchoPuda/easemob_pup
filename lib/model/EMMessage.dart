@@ -1,3 +1,4 @@
+import 'package:easemob_plu/easemob_plu.dart';
 
 /// 消息实体
 /// @author puppet
@@ -43,10 +44,6 @@ TYPE getType(String type) {
   }
 }
 
-enum TYPE {
-  TXT, IMAGE, VIDEO, LOCATION, VOICE, FILE, CMD
-}
-
 /// 会话类型 ： 单聊 、群聊 、聊天室
 ChatType getChatType(int chatType) {
   switch(chatType) {
@@ -59,8 +56,4 @@ ChatType getChatType(int chatType) {
     default:
       return ChatType.ChatRoom;
   }
-}
-
-enum ChatType {
-  Chat, GroupChat, ChatRoom
 }

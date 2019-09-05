@@ -9,6 +9,7 @@ import 'package:easemob_plu/model/EMMessage.dart';
 import 'package:easemob_plu/model/GroupInvitationDel.dart';
 import 'package:easemob_plu/model/GroupMsg.dart';
 import 'package:easemob_plu/model/JoinRequestDel.dart';
+import 'package:easemob_plu/model/ListEMMessage.dart';
 import 'package:easemob_plu/model/MemberOperation.dart';
 import 'package:easemob_plu/model/OwnerChanged.dart';
 import 'package:easemob_plu/model/UserRequestGroup.dart';
@@ -19,6 +20,14 @@ import 'model/GroupReceived.dart';
 
 class EasemobPlu {
 
+}
+
+enum TYPE {
+  TXT, IMAGE, VIDEO, LOCATION, VOICE, FILE, CMD
+}
+
+enum ChatType {
+  Chat, GroupChat, ChatRoom
 }
 
 final MethodChannel _channel =
@@ -131,32 +140,25 @@ Future removeMessageListener() async {
 }
 
 /// 获取聊天记录
-Future getAllMessages(String username) async {
+Future<ListEMMessage> getAllMessages(String username) async {
   var result = await _channel.invokeMethod("getAllMessages",{
     "username" : username,
   });
-  List<EMMessage> listMap = new List();
-  for (int i = 0; i < result.length(); i++) {
-    listMap.add(EMMessage.fromMap(result[i]));
-  }
-  return listMap;
+  print(result);
+  return ListEMMessage.fromList(result);
 }
 
 /// 获取更多聊天记录
-Future getAllMessagesMore(String username, String startMsgId) async {
+Future<ListEMMessage> getAllMessagesMore(String username, String startMsgId) async {
   var result = await _channel.invokeMethod("getAllMessagesMore",{
     "username" : username,
     "startMsgId" : startMsgId,
   });
-  List<EMMessage> listMap = new List();
-  for (int i = 0; i < result.length(); i++) {
-    listMap.add(EMMessage.fromMap(result[i]));
-  }
-  return listMap;
+  return ListEMMessage.fromList(result);
 }
 
 /// 获取未读消息数量
-Future getUnreadMsgCount(String username) async {
+Future<int> getUnreadMsgCount(String username) async {
   int result = await _channel.invokeMethod("getUnreadMsgCount",{
     "username" : username,
   });
@@ -174,7 +176,7 @@ Future getMsgAsRead({String username : ""}) async {
 }
 
 /// 获取消息总数
-Future getAllMsgCount(String username) async {
+Future<int> getAllMsgCount(String username) async {
   int result = await _channel.invokeMethod("getAllMsgCount",{
     "username" : username,
   });
@@ -184,12 +186,7 @@ Future getAllMsgCount(String username) async {
 /// 获取所有会话
 Future getAllConversations() async {
   var result = await _channel.invokeMethod("getAllConversations");
-  Map<String, EMConversation> mapConversation = new Map();
-  Iterable iterable = result.keys;
-  iterable.forEach((key){
-    mapConversation[key] = EMConversation.fromMap(result[key]);
-  });
-  return mapConversation;
+  return result;
 }
 
 /// 删除会话
@@ -204,7 +201,7 @@ Future deleteConversation(String username, {bool isDelHistory : true}) async {
 
 /// 获取好友列表
 /// 获取环信服务器上所有的，对应好友详情，分组等，需要到自己服务器上获取
-Future getAllContactsFromServer() async {
+Future<List<String>> getAllContactsFromServer() async {
   List<String> result = await _channel.invokeMethod("getAllContactsFromServer");
   return result;
 }
@@ -369,7 +366,7 @@ Future destroyGroup(String groupId) async {
 }
 
 /// 获取完整的群成员列表
-Future fetchGroupMembers(String groupId) async {
+Future<List<String>> fetchGroupMembers(String groupId) async {
   List<String> result = await _channel.invokeMethod("fetchGroupMembers",{
     "groupId" : groupId,
   });
@@ -378,7 +375,8 @@ Future fetchGroupMembers(String groupId) async {
 
 /// 获取群组列表
 /// 从服务器获取自己加入的和创建的群组列表，此api获取的群组sdk会自动保存到内存和db。
-Future getJoinedGroupsFromServer() async {
+Future<List<EMGroup>> getJoinedGroupsFromServer() async {
+  // TODO 需调整
   var result = await _channel.invokeMethod("getJoinedGroupsFromServer");
   List<EMGroup> listMap = new List();
   for (int i = 0; i < result.length(); i++) {
@@ -406,7 +404,7 @@ Future changeGroupDescription(String groupId, String description) async {
 }
 
 /// 群组信息
-Future getGroupFromServer(String groupId) async {
+Future<EMGroup> getGroupFromServer(String groupId) async {
   var result = await _channel.invokeMethod("getGroupFromServer",{
     "groupId" : groupId,
   });
@@ -452,6 +450,7 @@ Future endCall() async {
 }
 
 /// 连接失败状态回调
+/// 登录成功自动注册了监听
 /// 1.账号被移除
 /// 2.账号在其他设备登录
 /// 3.连接不到聊天服务器
@@ -465,17 +464,29 @@ StreamController<String> _msgSendStateController = new StreamController.broadcas
 
 Stream<String> get responseFromMsgSendStateListener => _msgSendStateController.stream;
 
-/// 接收消息(仅提示是否有消息)
-StreamController<List<EMMessage>> _msgListenerController = new StreamController.broadcast();
+/// 登录监听
+StreamController<String> _loginController = new StreamController.broadcast();
 
-Stream<List<EMMessage>> get responseFromMsgListener => _msgListenerController.stream;
+Stream<String> get responseFromLogin => _loginController.stream;
+
+/// 接收消息(仅提示是否有消息)
+StreamController<ListEMMessage> _msgListenerController = new StreamController.broadcast();
+
+Stream<ListEMMessage> get responseFromMsgListener => _msgListenerController.stream;
+
+/// 获取会话监听（获取所有会话后使用）
+StreamController<Map<String, EMConversation>> _onConversationGetController = new StreamController.broadcast();
+
+Stream<Map<String, EMConversation>> get responseFromConversationGet => _onConversationGetController.stream;
 
 /// 监听好友状态事件
+/// 登录成功自动注册了监听
 StreamController<Contact> _contactListenerController = new StreamController.broadcast();
 
 Stream<Contact> get responseFromContactListener => _contactListenerController.stream;
 
 /// 监听好友邀请事件
+/// 登录成功自动注册了监听
 StreamController<ContactInvited> _contactInvitedListenerController = new StreamController.broadcast();
 
 Stream<ContactInvited> get responseFromContactInvitedListener => _contactInvitedListenerController.stream;
@@ -573,14 +584,19 @@ Future<dynamic> _handler(MethodCall methodCall) {
     _disconnectController.add(methodCall.arguments);
   } else if ("msgSendState" == methodCall.method) {
     _msgSendStateController.add(methodCall.arguments);
+  } else if ("loginListener" == methodCall.method) {
+    _loginController.add(methodCall.arguments);
   } else if ("emMsgListener" == methodCall.method) {
-    List<EMMessage> listMap = new List();
-    for (int i = 0; i < methodCall.arguments.length(); i++) {
-      listMap.add(EMMessage.fromMap(methodCall.arguments[i]));
-    }
-    _msgListenerController.add(listMap);
+    _msgListenerController.add(ListEMMessage.fromList(methodCall.arguments));
   } else if ("contactListener" == methodCall.method) {
     _contactListenerController.add(Contact.fromMap(methodCall.arguments));
+  } else if ("conversationGetListener" == methodCall.method) {
+    Map<String, EMConversation> mapConversation = new Map();
+    Iterable iterable = methodCall.arguments.keys;
+    iterable.forEach((key){
+      mapConversation[key] = EMConversation.fromMap(methodCall.arguments[key]);
+    });
+    _onConversationGetController.add(mapConversation);
   } else if ("contactInvitedListener" == methodCall.method) {
     _contactInvitedListenerController.add(ContactInvited.fromMap(methodCall.arguments));
   } else if ("onInvitationReceived" == methodCall.method) {

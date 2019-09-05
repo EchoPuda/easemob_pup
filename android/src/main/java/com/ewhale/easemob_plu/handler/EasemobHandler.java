@@ -97,6 +97,7 @@ public class EasemobHandler {
         //初始化
         EMClient.getInstance().init(registrar.context(),options);
         EMClient.getInstance().setDebugMode((boolean) call.argument("debugMode"));
+        result.success("success");
     }
 
     private static String getAppName(int pID) {
@@ -131,7 +132,14 @@ public class EasemobHandler {
                 EMClient.getInstance().groupManager().loadAllGroups();
                 EMClient.getInstance().chatManager().loadAllConversations();
                 Log.d("main", "登录聊天服务器成功！");
-                result.success("success");
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onLoginListener("success");
+                    }
+                });
+
+
                 EMClient.getInstance().addConnectionListener(new MyConnectionListener());
                 EMClient.getInstance().contactManager().setContactListener(new EMContactListener() {
                     @Override
@@ -173,7 +181,12 @@ public class EasemobHandler {
             @Override
             public void onError(int code, String error) {
                 Log.d("main", "登录聊天服务器失败！");
-                result.success("error");
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onLoginListener("error");
+                    }
+                });
             }
 
             @Override
@@ -208,12 +221,12 @@ public class EasemobHandler {
 
         @Override
         public void onConnected() {
+            Log.d("main", "连接成功！");
         }
 
         @Override
         public void onDisconnected(int errorCode) {
             registrar.activity().runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
                     if(errorCode == EMError.USER_REMOVED){
@@ -233,6 +246,7 @@ public class EasemobHandler {
                     }
                 }
             });
+
         }
     }
 
@@ -355,13 +369,24 @@ public class EasemobHandler {
         @Override
         public void onMessageReceived(List<EMMessage> messages) {
             //收到消息
-            EasemobResponseHandler.onMessageReceived(messages);
+            registrar.activity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("新消息（Android）");
+                    EasemobResponseHandler.onMessageReceived(messages);
+                }
+            });
         }
 
         @Override
         public void onCmdMessageReceived(List<EMMessage> messages) {
             //收到透传消息
-            EasemobResponseHandler.onMessageReceived(messages);
+            registrar.activity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    EasemobResponseHandler.onMessageReceived(messages);
+                }
+            });
         }
 
         @Override
@@ -448,42 +473,12 @@ public class EasemobHandler {
             map.put("fromUser",fromUser);
             String toUser = messages.get(i).getTo();
             map.put("toUser",toUser);
+            map.put("time",messages.get(i).getMsgTime());
             msgList.add(map);
         }
         result.success(msgList);
         //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
     }
-
-/*    private void play(EMMessage message) {
-        String localPath = ((EMVoiceMessageBody) message.getBody()).getLocalUrl();
-        File file = new File(localPath);
-        if (file.exists() && file.isFile()) {
-            ackMessage(message);
-            playVoice(message);
-            // Start the voice play animation.
-            ((EaseChatRowVoice) getChatRow()).startVoicePlayAnimation();
-        } else {
-            EMLog.e(TAG, "file not exist");
-        }
-    }
-
-    private void ackMessage(EMMessage message) {
-        EMMessage.ChatType chatType = message.getChatType();
-        if (!message.isAcked() && chatType == EMMessage.ChatType.Chat) {
-            try {
-                EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
-            } catch (HyphenateException e) {
-                e.printStackTrace();
-            }
-        }
-        if (!message.isListened()) {
-            EMClient.getInstance().chatManager().setVoiceMessageListened(message);
-        }
-    }*/
-
-/**
- *
- */
 
     /**
      * 获取更多聊天记录
@@ -589,10 +584,11 @@ public class EasemobHandler {
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         Set<String> keys = conversations.keySet();
         Iterator<String> iterator = keys.iterator();
-        Map<String, Map<String, Object>> listMap = new HashMap<>();
+        HashMap<String, HashMap<String, Object>> listMap = new HashMap<>();
         while (iterator.hasNext()) {
-            EMConversation emConversation = conversations.get(iterator.next());
-            Map<String, Object> map = new HashMap<>();
+            String key = iterator.next();
+            EMConversation emConversation = conversations.get(key);
+            HashMap<String, Object> map = new HashMap<>();
             if (emConversation != null) {
                 EMConversation.EMConversationType type = emConversation.getType();
                 if (type == EMConversation.EMConversationType.Chat) {
@@ -643,8 +639,8 @@ public class EasemobHandler {
             }
             long receiveTime = emMessage.getMsgTime();
             map.put("lastMsgTime",receiveTime);
-            listMap.put(iterator.next(),map);
-            result.success(listMap);
+            listMap.put(key,map);
+            EasemobResponseHandler.onConversationGet(listMap);
         }
     }
 
@@ -1209,5 +1205,32 @@ public class EasemobHandler {
         }
         result.success("success");
     }
+
+    /*    private void play(EMMessage message) {
+        String localPath = ((EMVoiceMessageBody) message.getBody()).getLocalUrl();
+        File file = new File(localPath);
+        if (file.exists() && file.isFile()) {
+            ackMessage(message);
+            playVoice(message);
+            // Start the voice play animation.
+            ((EaseChatRowVoice) getChatRow()).startVoicePlayAnimation();
+        } else {
+            EMLog.e(TAG, "file not exist");
+        }
+    }
+
+    private void ackMessage(EMMessage message) {
+        EMMessage.ChatType chatType = message.getChatType();
+        if (!message.isAcked() && chatType == EMMessage.ChatType.Chat) {
+            try {
+                EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!message.isListened()) {
+            EMClient.getInstance().chatManager().setVoiceMessageListened(message);
+        }
+    }*/
 
 }

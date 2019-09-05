@@ -27,6 +27,9 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 android {
     compileSdkVersion 28
 
+    //use legacy for android > 6.0
+    useLibrary 'org.apache.http.legacy'
+
     lintOptions {
         disable 'InvalidPackage'
     }

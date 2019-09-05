@@ -1,13 +1,21 @@
 
+import 'package:easemob_plu/easemob_plu.dart';
+
 /// 会话
 /// @author puppet
 ///
 class EMConversation {
+  ///会话类型
   final ChatType chatType;
+  ///消息的类型
   final TYPE type;
+  ///消息本体
   final String body;
+  ///会话ID
   final String conversationId;
+  ///会话的未读数
   final int unReadCount;
+  ///时间戳
   final int lastMsgTime;
 
   EMConversation.fromMap(Map map)
@@ -42,24 +50,16 @@ TYPE getType(String type) {
   }
 }
 
-enum TYPE {
-  TXT, IMAGE, VIDEO, LOCATION, VOICE, FILE, CMD
-}
-
 /// 会话类型 ： 单聊 、群聊 、聊天室
-ChatType getChatType(int chatType) {
+ChatType getChatType(String chatType) {
   switch(chatType) {
-    case 0:
+    case "Chat":
       return ChatType.Chat;
-    case 1:
+    case "GroupChat":
       return ChatType.GroupChat;
-    case 2:
+    case "ChatRoom":
       return ChatType.ChatRoom;
     default:
       return ChatType.ChatRoom;
   }
-}
-
-enum ChatType {
-  Chat, GroupChat, ChatRoom
 }
