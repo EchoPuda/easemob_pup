@@ -1,8 +1,7 @@
 import 'dart:io';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:easemob_plu/easemob_plu.dart' as easemob;
+import 'package:image_picker/image_picker.dart';
 
 /// 私聊
 /// @author puppet
@@ -20,8 +19,14 @@ class ChatPrivateState extends State<ChatPrivate> {
   List<String> _listMsgId = new List();
   List<Widget> _listMsgItem = new List();
   List<Widget> _listMsg = new List();
+  TextEditingController _controller;
+  ScrollController _scrollController = new ScrollController();
 
   bool _showSend = false;
+  String _editText = "";
+  bool _showBottom = false;
+  FocusNode _focusNode = FocusNode();
+  int _listLength = 0;
 
   /// 注册消息监听
   Future<void> _addMessageListener() async {
@@ -36,10 +41,19 @@ class ChatPrivateState extends State<ChatPrivate> {
   @override
   void initState() {
     super.initState();
+
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        setState(() {
+          _showBottom = false;
+        });
+      }
+    });
+
     _getAllMessages();
     _addMessageListener();
     // 消息接收监听
-    easemob.responseFromMsgListener.listen((data) {
+    easemob.responseFromMsgListener.listen((data) async {
       print("新消息");
       String fromUser;
       List<Widget> listMsg = new List();
@@ -55,26 +69,46 @@ class ChatPrivateState extends State<ChatPrivate> {
         print(fromUser);
         int newTimeStamp = data.list[i].time;
         easemob.TYPE type = data.list[i].type;
+
+        String body;
+        if (type == easemob.TYPE.IMAGE) {
+          body = await data.list[i].body;
+        } else {
+          body = data.list[i].body;
+        }
         listMsg.add(new MessageTime(time: _delTimeStamp(newTimeStamp),));
-        String body = data.list[i].body;
+        print(body);
         if (fromUser != widget.username) {
           listMsg.add(new MessageShowMe(
             body: body,
+            type: type,
           ));
         } else {
           listMsg.add(new MessageShowFrom(
             body: body,
+            type: type,
           ));
         }
       }
-      print(_listMsg);
       listMsg.insertAll(0, _listMsg);
       _listMsg = listMsg;
       print(listMsg);
       setState(() {
         _listMsgItem = listMsg;
+        _listLength = listMsg.length;
       });
+      scrollToEnd();
     });
+    //消息发送后监听
+    easemob.responseFromMsgSendStateListener.listen((data){
+      print("监听：" + data);
+    });
+  }
+
+  void scrollToEnd() {
+    double scrollOffset = _scrollController.position.maxScrollExtent + 100;
+    print("offset:" + "$scrollOffset");
+    _scrollController.animateTo(scrollOffset, duration: Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   Future<void> _getAllMessages() async {
@@ -94,15 +128,18 @@ class ChatPrivateState extends State<ChatPrivate> {
       easemob.TYPE type = result.list[i].type;
       String body = result.list[i].body;
       listMsg.add(new MessageTime(time: timeText,));
+      _listMsg.add(new MessageTime(time: timeText,));
       if (fromUser != widget.username) {
         Widget msgShow = new MessageShowMe(
           body: body,
+          type: type,
         );
         listMsg.add(msgShow);
         _listMsg.add(msgShow);
       } else {
         Widget msgShow = new MessageShowFrom(
           body: body,
+          type: type,
         );
         listMsg.add(msgShow);
         _listMsg.add(msgShow);
@@ -110,7 +147,10 @@ class ChatPrivateState extends State<ChatPrivate> {
     }
     setState(() {
       _listMsgItem = listMsg;
+      _listLength = listMsg.length;
     });
+    _scrollController.animateTo(listMsg.length * 50.0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+
   }
 
   String _delTimeStamp(int timeStamp) {
@@ -125,10 +165,12 @@ class ChatPrivateState extends State<ChatPrivate> {
     if (value.isNotEmpty) {
       setState(() {
         _showSend = true;
+        _editText = value;
       });
     } else {
       setState(() {
         _showSend = false;
+        _editText = "";
       });
     }
   }
@@ -137,10 +179,112 @@ class ChatPrivateState extends State<ChatPrivate> {
   void dispose() {
     super.dispose();
     _removeMsgListener();
+    _controller?.dispose();
+    _scrollController?.dispose();
+    _getMsgAsRead(widget.username);
+  }
+
+  Future<void> _getMsgAsRead(String username) async {
+    var result = await easemob.getMsgAsRead(username: username);
+  }
+
+  ///发送文本
+  void _sendTextMsg() async {
+    if (_editText != "") {
+      String text = _editText;
+      List<Widget> listMsg = new List();
+      int dateNow = new DateTime.now().millisecondsSinceEpoch;
+      listMsg.add(new MessageTime(time: _delTimeStamp(dateNow),));
+      listMsg.add(new MessageShowMe(
+        body: _editText,
+        type: easemob.TYPE.TXT,
+      ));
+      listMsg.insertAll(0, _listMsg);
+      _listMsg = listMsg;
+      setState(() {
+        _listMsgItem = listMsg;
+        _listLength = _listMsgItem.length;
+        _editText = "";
+      });
+      scrollToEnd();
+      String result = await easemob.sendTextMessage(widget.username, text);
+      print("结果："+ result);
+    }
+  }
+
+  ///发送图片
+  void _sendImageMsg(String path) async {
+    print(path);
+
+    scrollToEnd();
+    String result = await easemob.sendImageMessage(widget.username, path);
+    print(result);
+    if (result == "success") {
+      await easemob.getThumbPath(path);
+    }
+  }
+
+  Future _chooseImageMsg() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      return;
+    }
+    List<Widget> listMsg = new List();
+    int dateNow = new DateTime.now().millisecondsSinceEpoch;
+    listMsg.add(new MessageTime(time: _delTimeStamp(dateNow),));
+    listMsg.add(new MessageShowMe(
+      body: image.path,
+      type: easemob.TYPE.IMAGE,
+    ));
+    listMsg.insertAll(0, _listMsg);
+    _listMsg = listMsg;
+    setState(() {
+      _listMsgItem = listMsg;
+      _listLength = listMsg.length;
+    });
+    _sendImageMsg(image.path);
+  }
+
+  Future _shootImageMsg() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
+    List<Widget> listMsg = new List();
+    int dateNow = new DateTime.now().millisecondsSinceEpoch;
+    listMsg.add(new MessageTime(time: _delTimeStamp(dateNow),));
+    listMsg.add(new MessageShowMe(
+      body: image.path,
+      type: easemob.TYPE.IMAGE,
+    ));
+    listMsg.insertAll(0, _listMsg);
+    _listMsg = listMsg;
+    setState(() {
+      _listMsgItem = listMsg;
+      _listLength = listMsg.length;
+    });
+    _sendImageMsg(image.path);
+  }
+
+  ///键盘下菜单事件
+  void _showBottomMenu() {
+    setState(() {
+      _showBottom = !_showBottom;
+      if (_showBottom) {
+        _focusNode.unfocus();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    _controller = new TextEditingController.fromValue(TextEditingValue(
+        text: _editText,
+        selection: new TextSelection.fromPosition(TextPosition(
+            affinity: TextAffinity.downstream,
+            offset: _editText.length,
+        )),
+    ));
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.username}"),
@@ -154,10 +298,14 @@ class ChatPrivateState extends State<ChatPrivate> {
               flex: 1,
               child: Container(
                 color: Color(0xFFF6F6F6),
-                child: ListView(
+                child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  children: _listMsgItem,
+                  itemCount: _listLength,
+                  controller: _scrollController,
+                  itemBuilder: (BuildContext context, int position) {
+                    return _listMsgItem[position];
+                  },
                 ),
               ),
             ),
@@ -168,49 +316,141 @@ class ChatPrivateState extends State<ChatPrivate> {
             ),
             Container(
               padding: EdgeInsets.only(left: 10.0,right: 10.0,bottom: 15.0,top: 10.0),
-              child: Row(
+              child: Column(
                 children: <Widget>[
-                  Image.asset("asset/image/chat_icon_keyboard.png",width: 28.0,),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      color: Colors.white,
-                      width: double.maxFinite,
-                      margin: EdgeInsets.symmetric(horizontal: 10.0),
-                      padding: EdgeInsets.only(left: 10.0),
-                      child: TextField(
-                        minLines: 1,
-                        maxLines: 10,
-                        onChanged: _onChangeText,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          counterText: "",
+                  Row(
+                    children: <Widget>[
+                      Image.asset("asset/image/chat_icon_keyboard.png",width: 28.0,),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          color: Colors.white,
+                          width: double.maxFinite,
+                          margin: EdgeInsets.symmetric(horizontal: 10.0),
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: TextField(
+                            controller: _controller,
+                            minLines: 1,
+                            maxLines: 10,
+                            focusNode: _focusNode,
+                            onEditingComplete: _sendTextMsg,
+                            onChanged: _onChangeText,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              counterText: "",
+                            ),
+                          ),
                         ),
+                      ),
+                      Image.asset("asset/image/chat_icon_expression.png",width: 28.0,),
+                      SizedBox(width: 10.0,),
+                      _showSend
+                          ? InkWell(
+                        onTap: _sendTextMsg,
+                        child: new Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12.0,vertical: 4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(3.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "发送",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                          : GestureDetector(
+                        onTap: () {_showBottomMenu();},
+                        child: Image.asset("asset/image/chat_icon_add.png",width: 28.0,),
+                      ),
+                    ],
+                  ),
+                  Offstage(
+                    offstage: !_showBottom,
+                    child: Container(
+                      width: double.maxFinite,
+                      height: 300.0,
+                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                      child: GridView.count(
+                        physics: new NeverScrollableScrollPhysics(),
+                        crossAxisCount: 4,
+                        mainAxisSpacing: 10.0,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () {_chooseImageMsg();},
+                            child: Column(
+                              children: <Widget>[
+                                new Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "图片",
+                                      style: TextStyle(
+                                          fontSize: 18.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Text(
+                                  "照片",
+                                  style: TextStyle(
+                                      fontSize: 13.0
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {_shootImageMsg();},
+                            child: Column(
+                              children: <Widget>[
+                                new Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "拍照",
+                                      style: TextStyle(
+                                          fontSize: 18.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Text(
+                                  "拍照",
+                                  style: TextStyle(
+                                      fontSize: 13.0
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Image.asset("asset/image/chat_icon_expression.png",width: 28.0,),
-                  SizedBox(width: 10.0,),
-                  _showSend
-                      ? new Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.0,vertical: 4.0),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(3.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "发送",
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
-                      : Image.asset("asset/image/chat_icon_add.png",width: 28.0,),
                 ],
-              ),
+              )
             ),
           ],
         ),
@@ -293,7 +533,7 @@ class MessageShowMeState extends State<MessageShowMe> {
       alignment: Alignment.topRight,
       children: <Widget>[
         new Container(
-          child: Image.file(File(widget.body)),
+          child: Image.file(File(widget.body), width: 100.0,),
         )
       ],
     );
@@ -384,9 +624,9 @@ class MessageShowFromState extends State<MessageShowFrom> {
         new Container(
           child: Image.file(
             File(widget.body),
-
+            width: 50.0,
           ),
-        )
+        ),
       ],
     );
 

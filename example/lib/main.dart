@@ -171,6 +171,7 @@ class HomeState extends State<Home> {
               unreadCount: unReadCount[username] + _mapUnreadCount[username],
             ),
           );
+          _mapUnreadCount[username] = unReadCount[username] + _mapUnreadCount[username];
           _mapConversation[username] = newConversationItem;
           print(_mapConversation);
         } else {
@@ -209,6 +210,7 @@ class HomeState extends State<Home> {
   void _gotoChat(String username) {
     //离开页面要移除消息监听
     _removeMsgListener();
+    _getMsgAsRead(username);
     Navigator.push(context,new MaterialPageRoute(
       builder: (BuildContext context) {
         return ChatPrivate(

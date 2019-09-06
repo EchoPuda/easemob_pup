@@ -6,6 +6,8 @@ class EMMessage {
   final ChatType chatType;
   final TYPE type;
   final String body;
+  /// 类型为图片时原图地址
+  final String image;
   final String msgId;
   final String fromUser;
   final String toUser;
@@ -15,6 +17,7 @@ class EMMessage {
       : chatType = getChatType(map["chatType"]),
         type = getType(map["type"]),
         body = map["body"],
+        image = map["image"],
         msgId = map["msgId"],
         fromUser = map["fromUser"],
         time = map["time"],

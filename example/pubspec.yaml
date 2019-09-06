@@ -13,6 +13,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
+  # 图片处理工具
+  image: ^2.1.4
+  # 图片选择
+  image_picker: ^0.4.12+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

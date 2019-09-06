@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easemob_plu/model/AdminOperation.dart';
 import 'package:easemob_plu/model/AutoGroupAccept.dart';
+import 'package:easemob_plu/model/CharRoom.dart';
 import 'package:easemob_plu/model/ContactInvited.dart';
 import 'package:easemob_plu/model/EMConversation.dart';
 import 'package:easemob_plu/model/EMGroup.dart';
@@ -113,16 +114,28 @@ Future sendImageMessage(
     String toChatUsername,
     //图片本地路径
     String imagePath,
-    //false默认不发送原图
-    bool originally,
-    //是否是群聊，默认是单聊
-    { bool chatType : false,}
+    {
+      //false默认不发送原图
+      bool originally : false,
+      //是否是群聊，默认是单聊
+      bool chatType : false,}
     ) async {
   String result = await _channel.invokeMethod("sendImageMessage",{
     "imagePath" : imagePath,
     "toChatUsername" : toChatUsername,
     "originally" : originally,
     "chatType" : chatType,
+  });
+  return result;
+}
+
+/// 发送图片消息
+Future getThumbPath(
+    //图片本地路径
+    String imagePath,
+    ) async {
+  String result = await _channel.invokeMethod("sendImageMessage",{
+    "imagePath" : imagePath,
   });
   return result;
 }
@@ -448,6 +461,31 @@ Future endCall() async {
   var result = await _channel.invokeMethod("endCall");
   return result;
 }
+
+/// 加入聊天室
+Future<String> joinChatRoom(String roomId) async {
+  var result = await _channel.invokeMethod("joinChatRoom",{
+    "roomId" : roomId,
+  });
+  return result;
+}
+
+/// 离开聊天室
+Future<String> leaveChatRoom(String roomId) async {
+  var result = await _channel.invokeMethod("leaveChatRoom",{
+    "roomId" : roomId,
+  });
+  return result;
+}
+
+/// 获取聊天室详情
+Future<ChatRoom> getChatRoomDetail(String roomId) async {
+  var result = await _channel.invokeMethod("getChatRoomDetail",{
+    "roomId" : roomId,
+  });
+  return ChatRoom.fromMap(result);
+}
+
 
 /// 连接失败状态回调
 /// 登录成功自动注册了监听

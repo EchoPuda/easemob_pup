@@ -117,6 +117,14 @@ public class EasemobPluPlugin implements MethodCallHandler {
         EasemobHandler.rejectCall(call, result);
     } else if (call.method.equals("endCall")) {
         EasemobHandler.endCall(call, result);
+    } else if (call.method.equals("getThumbPath")) {
+        EasemobHandler.getThumbPath(call, result);
+    } else if (call.method.equals("joinChatRoom")) {
+        EasemobHandler.joinChatRoom(call, result);
+    } else if (call.method.equals("leaveChatRoom")) {
+        EasemobHandler.leaveChatRoom(call, result);
+    } else if (call.method.equals("getChatRoomDetail")) {
+        EasemobHandler.getChatRoomDetail(call, result);
     } else {
       result.notImplemented();
     }

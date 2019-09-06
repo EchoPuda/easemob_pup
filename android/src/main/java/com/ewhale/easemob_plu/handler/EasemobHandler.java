@@ -11,13 +11,16 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.ewhale.easemob_plu.utils.EaseImageUtils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMGroupChangeListener;
 import com.hyphenate.EMMessageListener;
+import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCursorResult;
@@ -275,12 +278,24 @@ public class EasemobHandler {
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
-                EasemobResponseHandler.onMsgSendState("success");
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("success");
+                        result.success("success");
+                    }
+                });
             }
 
             @Override
             public void onError(int code, String error) {
-                EasemobResponseHandler.onMsgSendState("error");
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("error");
+                        result.success("error");
+                    }
+                });
             }
 
             @Override
@@ -309,12 +324,24 @@ public class EasemobHandler {
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
-                EasemobResponseHandler.onMsgSendState("success");
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("success");
+                        result.success("success");
+                    }
+                });
             }
 
             @Override
             public void onError(int code, String error) {
-                EasemobResponseHandler.onMsgSendState("error");
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("error");
+                        result.success("error");
+                    }
+                });
             }
 
             @Override
@@ -331,7 +358,14 @@ public class EasemobHandler {
         //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
         String imagePath = call.argument("imagePath");
         assert imagePath != null;
-        EMMessage message = EMMessage.createImageSendMessage(imagePath, (boolean)call.argument("originally"), call.argument("toChatUsername"));
+        boolean originally;
+        if (call.argument("originally") != null) {
+            originally = (boolean)call.argument("originally");
+        } else {
+            originally = false;
+        }
+
+        EMMessage message = EMMessage.createImageSendMessage(imagePath, originally, call.argument("toChatUsername"));
         //如果是群聊，设置chattype，默认是单聊
         boolean chatType = (boolean)call.argument("chatType");
         if (chatType){
@@ -342,12 +376,28 @@ public class EasemobHandler {
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
-                EasemobResponseHandler.onMsgSendState("success");
+
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("success");
+                        result.success("success");
+                    }
+                });
+
             }
 
             @Override
             public void onError(int code, String error) {
-                EasemobResponseHandler.onMsgSendState("error");
+
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("error");
+                        result.success("error");
+                    }
+                });
+
             }
 
             @Override
@@ -372,7 +422,6 @@ public class EasemobHandler {
             registrar.activity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("新消息（Android）");
                     EasemobResponseHandler.onMessageReceived(messages);
                 }
             });
@@ -417,6 +466,13 @@ public class EasemobHandler {
         EMClient.getInstance().chatManager().removeMessageListener(msgListener);
     }
 
+    public static void getThumbPath(MethodCall call, MethodChannel.Result result) {
+        String localImagePath = call.argument("localImagePath");
+        assert localImagePath != null;
+        String thumbPath = EaseImageUtils.getThumbnailImagePath(localImagePath);
+        result.success(thumbPath);
+    }
+
     /**
      * 获取聊天记录
      */
@@ -445,12 +501,20 @@ public class EasemobHandler {
                 case IMAGE:
                     map.put("type","IMAGE");
                     EMImageMessageBody imgBody = (EMImageMessageBody) messages.get(i).getBody();
-                    map.put("body",imgBody.getLocalUrl());
+                    String thumbPath = imgBody.thumbnailLocalPath();
+                    if (!new File(thumbPath).exists()) {
+                        // to make it compatible with thumbnail received in previous version
+                        thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+                    }
+                    String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
+                    System.out.println(thumbPath);
+                    map.put("body",thumbPath);
+                    map.put("image",imagePath);
                     break;
                 case VOICE:
                     map.put("type","VOICE");
                     EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
-                    map.put("body",voiceBody.getLocalUrl());
+                    map.put("body",voiceBody.getRemoteUrl());
                     break;
                 case CMD:
                     map.put("type","CMD");
@@ -510,12 +574,19 @@ public class EasemobHandler {
                 case IMAGE:
                     map.put("type","IMAGE");
                     EMImageMessageBody imgBody = (EMImageMessageBody) messages.get(i).getBody();
-                    map.put("body",imgBody.getLocalUrl());
+                    String thumbPath = imgBody.thumbnailLocalPath();
+                    if (!new File(thumbPath).exists()) {
+                        // to make it compatible with thumbnail received in previous version
+                        thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+                    }
+                    String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
+                    map.put("body",thumbPath);
+                    map.put("image",imagePath);
                     break;
                 case VOICE:
                     map.put("type","VOICE");
                     EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
-                    map.put("body",voiceBody.getLocalUrl());
+                    map.put("body",voiceBody.getRemoteUrl());
                     break;
                 case CMD:
                     map.put("type","CMD");
@@ -615,12 +686,19 @@ public class EasemobHandler {
                 case IMAGE:
                     map.put("type","IMAGE");
                     EMImageMessageBody imgBody = (EMImageMessageBody) emMessage.getBody();
-                    map.put("body",imgBody.getLocalUrl());
+                    String thumbPath = imgBody.thumbnailLocalPath();
+                    if (!new File(thumbPath).exists()) {
+                        // to make it compatible with thumbnail received in previous version
+                        thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+                    }
+                    String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
+                    map.put("body",thumbPath);
+                    map.put("image",imagePath);
                     break;
                 case VOICE:
                     map.put("type","VOICE");
                     EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) emMessage.getBody();
-                    map.put("body",voiceBody.getLocalUrl());
+                    map.put("body",voiceBody.getRemoteUrl());
                     break;
                 case CMD:
                     map.put("type","CMD");
@@ -1206,31 +1284,74 @@ public class EasemobHandler {
         result.success("success");
     }
 
-    /*    private void play(EMMessage message) {
-        String localPath = ((EMVoiceMessageBody) message.getBody()).getLocalUrl();
-        File file = new File(localPath);
-        if (file.exists() && file.isFile()) {
-            ackMessage(message);
-            playVoice(message);
-            // Start the voice play animation.
-            ((EaseChatRowVoice) getChatRow()).startVoicePlayAnimation();
-        } else {
-            EMLog.e(TAG, "file not exist");
+    /**
+     * 加入聊天室
+     */
+    public static void joinChatRoom(MethodCall call, MethodChannel.Result result) {
+
+        String roomId = call.argument("roomId");
+        //roomId为聊天室ID
+        EMClient.getInstance().chatroomManager().joinChatRoom(roomId, new EMValueCallBack<EMChatRoom>() {
+
+            @Override
+            public void onSuccess(EMChatRoom value) {
+                //加入聊天室成功
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.success("success");
+                    }
+                });
+            }
+
+            @Override
+            public void onError(final int error, String errorMsg) {
+                //加入聊天室失败
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.success("error");
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 离开聊天室
+     */
+    public static void leaveChatRoom(MethodCall call, MethodChannel.Result result) {
+        String roomId = call.argument("roomId");
+        EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
+        result.success("success");
+    }
+
+    /**
+     * 获取聊天室详情
+     */
+    public static void getChatRoomDetail(MethodCall call, MethodChannel.Result result) {
+        String roomId = call.argument("roomId");
+        try {
+            EMChatRoom room = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId);
+            String roomName = room.getName();
+            String id = room.getId();
+            String description = room.getDescription();
+            String owner = room.getOwner();
+            String announcement = room.getAnnouncement();
+            int memberCount = room.getMemberCount();
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("roomName",roomName);
+            map.put("id",id);
+            map.put("description",description);
+            map.put("owner",owner);
+            map.put("announcement",announcement);
+            map.put("memberCount",memberCount);
+            result.success(map);
+        } catch (HyphenateException e) {
+            e.printStackTrace();
         }
     }
 
-    private void ackMessage(EMMessage message) {
-        EMMessage.ChatType chatType = message.getChatType();
-        if (!message.isAcked() && chatType == EMMessage.ChatType.Chat) {
-            try {
-                EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
-            } catch (HyphenateException e) {
-                e.printStackTrace();
-            }
-        }
-        if (!message.isListened()) {
-            EMClient.getInstance().chatManager().setVoiceMessageListened(message);
-        }
-    }*/
+
 
 }

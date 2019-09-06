@@ -1,10 +1,17 @@
 package com.ewhale.easemob_plu.handler;
 
+import android.view.View;
+
+import com.ewhale.easemob_plu.R;
+import com.ewhale.easemob_plu.utils.EaseImageUtils;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMFileMessageBody;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.EMVoiceMessageBody;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +50,7 @@ public class EasemobResponseHandler {
 
     public static void onMessageReceived(List<EMMessage> messages){
         ArrayList<Map<String, Object>> msgList = new ArrayList<>();
+        String thumbPath = "";
         for (int i = 0; i < messages.size(); i++) {
             Map<String, Object> map = new HashMap<>();
             EMMessage.ChatType chatType = messages.get(i).getChatType();
@@ -63,7 +71,24 @@ public class EasemobResponseHandler {
                 case IMAGE:
                     map.put("type","IMAGE");
                     EMImageMessageBody imgBody = (EMImageMessageBody) messages.get(i).getBody();
-                    map.put("body",imgBody.getLocalUrl());
+                    while ("".equals(thumbPath)) {
+                        if (imgBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.DOWNLOADING ||
+                                imgBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.PENDING) {
+
+                        } else if(imgBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.FAILED){
+
+                        } else {
+
+                            thumbPath = imgBody.thumbnailLocalPath();
+                            if (!new File(thumbPath).exists()) {
+                                // to make it compatible with thumbnail received in previous version
+                                thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+                            }
+                        }
+                    }
+                    String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
+                    map.put("body",thumbPath);
+                    map.put("image",imagePath);
                     break;
                 case VOICE:
                     map.put("type","VOICE");
@@ -93,8 +118,9 @@ public class EasemobResponseHandler {
             map.put("toUser",toUser);
             msgList.add(map);
             map.put("time",messages.get(i).getMsgTime());
+            channel.invokeMethod("emMsgListener", msgList);
         }
-        channel.invokeMethod("emMsgListener", msgList);
+
     }
 
     public static void onContactListener(String username, int type){
