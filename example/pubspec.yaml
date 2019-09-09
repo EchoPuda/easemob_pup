@@ -16,7 +16,7 @@ dependencies:
   # 图片处理工具
   image: ^2.1.4
   # 图片选择
-  image_picker: ^0.4.12+1
+  image_picker: ^0.6.1+4
 
 dev_dependencies:
   flutter_test:
