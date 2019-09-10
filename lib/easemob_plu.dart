@@ -79,8 +79,8 @@ Future sendTextMessage(
     String toChatUsername,
     //内容
     String content,
-    //是否是群聊，默认是单聊
-    { bool chatType : false,}
+    //是否是群聊，默认是单聊0，群聊为1，聊天室为2
+    { int chatType : 0,}
 ) async {
   String result = await _channel.invokeMethod("sendTextMessage",{
     "content" : content,
@@ -97,8 +97,8 @@ Future sendVoiceMessage(
     String filePath,
     //录音时间
     int length,
-    //是否是群聊，默认是单聊
-    { bool chatType : false,}
+    //是否是群聊，默认是单聊0，群聊为1，聊天室为2
+    { int chatType : 0,}
     ) async {
   String result = await _channel.invokeMethod("sendVoiceMessage",{
     "filePath" : filePath,
@@ -117,8 +117,8 @@ Future sendImageMessage(
     {
       //false默认不发送原图
       bool originally : false,
-      //是否是群聊，默认是单聊
-      bool chatType : false,}
+      //是否是群聊，默认是单聊0，群聊为1，聊天室为2
+      int chatType : 0,}
     ) async {
   String result = await _channel.invokeMethod("sendImageMessage",{
     "imagePath" : imagePath,
@@ -129,7 +129,7 @@ Future sendImageMessage(
   return result;
 }
 
-/// 发送图片消息
+/// 保存图片缩略图
 Future getThumbPath(
     //图片本地路径
     String imagePath,

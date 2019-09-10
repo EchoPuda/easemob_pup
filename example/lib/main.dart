@@ -276,6 +276,7 @@ class HomeState extends State<Home> {
   void dispose() async {
     ///退出时移除消息的监听
     await easemob.removeMessageListener();
+    await easemob.logout();
     super.dispose();
   }
 
