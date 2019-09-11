@@ -135,7 +135,7 @@ Future getThumbPath(
     String imagePath,
     ) async {
   String result = await _channel.invokeMethod("getThumbPath",{
-    "imagePath" : imagePath,
+    "localImagePath" : imagePath,
   });
   return result;
 }
