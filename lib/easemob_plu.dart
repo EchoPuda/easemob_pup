@@ -24,7 +24,7 @@ class EasemobPlu {
 }
 
 enum TYPE {
-  TXT, IMAGE, VIDEO, LOCATION, VOICE, FILE, CMD, EMO
+  TXT, IMAGE, VIDEO, LOCATION, VOICE, FILE, CMD, RED
 }
 
 enum ChatType {
