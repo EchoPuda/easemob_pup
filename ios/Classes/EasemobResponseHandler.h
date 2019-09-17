@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic)FlutterMethodChannel *channel;
 
-- (void)initEaseMob:(FlutterMethodCall*)call;
+- (void)initEaseMob:(FlutterMethodCall*)call result:(FlutterResult)result;
 
 - (void)login:(FlutterMethodCall*)call;
 

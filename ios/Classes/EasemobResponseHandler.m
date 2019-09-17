@@ -46,7 +46,7 @@
 
 }
 
-- (void)initEaseMob:(FlutterMethodCall*)call{
+- (void)initEaseMob:(FlutterMethodCall*)call result:(FlutterResult)result{
     //初始化环信
     EMOptions *options = [EMOptions optionsWithAppkey:call.arguments[@"appKey"]];
     [options setIsAutoLogin:[call.arguments[@"autoLogin"] boolValue]];
@@ -57,6 +57,7 @@
     //生产: banyunbangBLilyDisturtion
     options.apnsCertName = @"app_dev";
     [[EMClient sharedClient] initializeSDKWithOptions:options];
+    result(@"success");
 }
 
 

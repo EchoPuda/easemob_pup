@@ -29,9 +29,9 @@
   }
 
     if ([@"initEaseMob" isEqualToString:call.method]) {
-        
+
         //初始化
-        [self.handler initEaseMob:call];
+        [self.handler initEaseMob:call result:result];
         
     } else if([@"EMLogin" isEqualToString:call.method]){
         //登录
