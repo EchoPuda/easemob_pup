@@ -46,6 +46,8 @@ Future<String> initEaseMobPlu({
   bool debugMode : false,
   //首次登陆成功后，自动登录
   bool autoLogin : true,
+  //AppKey
+  String appKey : "easemob-demo#chatdemoui",
 }) async {
   String result = await _channel.invokeMethod("initEaseMob", {
     "autoInvitation" : autoInvitation,
@@ -53,6 +55,7 @@ Future<String> initEaseMobPlu({
     "autoDownloadThumbnail" : autoDownloadThumbnail,
     "debugMode" : debugMode,
     "autoLogin" : autoLogin,
+    "appKey" : appKey,
   });
   return result;
 }
@@ -153,9 +156,10 @@ Future removeMessageListener() async {
 }
 
 /// 获取聊天记录
-Future<ListEMMessage> getAllMessages(String username) async {
+Future<ListEMMessage> getAllMessages(String username,{int chatType : 0}) async {
   var result = await _channel.invokeMethod("getAllMessages",{
     "username" : username,
+    "chatType" : chatType,
   });
   print(result);
   return ListEMMessage.fromList(result);
