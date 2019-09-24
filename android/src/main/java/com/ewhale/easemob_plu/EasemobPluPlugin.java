@@ -125,6 +125,8 @@ public class EasemobPluPlugin implements MethodCallHandler {
         EasemobHandler.leaveChatRoom(call, result);
     } else if (call.method.equals("getChatRoomDetail")) {
         EasemobHandler.getChatRoomDetail(call, result);
+    } else if (call.method.equals("searchMessage")) {
+        EasemobHandler.searchMessage(call, result);
     } else {
       result.notImplemented();
     }

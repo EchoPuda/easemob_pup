@@ -174,6 +174,15 @@ Future<ListEMMessage> getAllMessagesMore(String username, String startMsgId) asy
   return ListEMMessage.fromList(result);
 }
 
+/// 搜索消息
+Future<ListEMMessage> searchMessage(String keyWords, {String userName : ""}) async {
+  var result = await _channel.invokeMethod("searchMessage",{
+    "keyWords" : keyWords,
+    "userName" : userName,
+  });
+  return ListEMMessage.fromList(result);
+}
+
 /// 获取未读消息数量
 Future<int> getUnreadMsgCount(String username) async {
   int result = await _channel.invokeMethod("getUnreadMsgCount",{
