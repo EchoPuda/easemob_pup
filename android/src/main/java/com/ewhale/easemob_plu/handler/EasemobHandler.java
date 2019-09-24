@@ -38,7 +38,10 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.NetUtils;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -549,8 +552,74 @@ public class EasemobHandler {
 
     public static void searchMessage(MethodCall call, MethodChannel.Result result) {
         String keyWords = call.argument("keyWords");
+        int time = (int)call.argument("time");
+        List<EMMessage> messages = EMClient.getInstance().chatManager().searchMsgFromDB(keyWords,time,100,null,EMConversation.EMSearchDirection.UP);
+        List<Map<String, Object>> msgList = new ArrayList<>();
+        for (int i = 0; i < messages.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            EMMessage.ChatType chatType = messages.get(i).getChatType();
+            if (chatType == EMMessage.ChatType.Chat) {
+                map.put("chatType", 0);
+            } else if (chatType == EMMessage.ChatType.GroupChat) {
+                map.put("chatType", 1);
+            } else {
+                map.put("chatType", 2);
+            }
+            EMMessage.Type type = messages.get(i).getType();
+            switch (type) {
+                case TXT:
+                    map.put("type","TXT");
+                    EMTextMessageBody textBody = (EMTextMessageBody) messages.get(i).getBody();
+                    map.put("body",textBody.getMessage());
+                    break;
+                case IMAGE:
+                    map.put("type","IMAGE");
+                    EMImageMessageBody imgBody = (EMImageMessageBody) messages.get(i).getBody();
+                    String thumbPath = imgBody.thumbnailLocalPath();
+                    if (!new File(thumbPath).exists()) {
+                        // to make it compatible with thumbnail received in previous version
+                        thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+                    }
+                    String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
+                    System.out.println(thumbPath);
+                    map.put("body",thumbPath);
+                    map.put("image",imagePath);
+                    break;
+                case VOICE:
+                    map.put("type","VOICE");
+                    EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                    map.put("body",voiceBody.getRemoteUrl());
+                    break;
+                case CMD:
+                    map.put("type","CMD");
+                    break;
+                case FILE:
+                    map.put("type","FILE");
+                    break;
+                case VIDEO:
+                    map.put("type","VIDEO");
+                    break;
+                case LOCATION:
+                    map.put("type","LOCATION");
+                    break;
+                default:
+                    break;
+            }
+            String msgId = messages.get(i).getMsgId();
+            map.put("msgId",msgId);
+            String fromUser = messages.get(i).getFrom();
+            map.put("fromUser",fromUser);
+            String toUser = messages.get(i).getTo();
+            map.put("toUser",toUser);
+            map.put("time",messages.get(i).getMsgTime());
+            msgList.add(map);
+        }
+        result.success(msgList);
+    }
+
+    public static void searchMessageUser(MethodCall call, MethodChannel.Result result) {
         String userName = call.argument("userName");
-        List<EMMessage> messages = EMClient.getInstance().chatManager().searchMsgFromDB(keyWords,0,100,null,EMConversation.EMSearchDirection.UP);
+        List<EMMessage> messages = EMClient.getInstance().chatManager().searchMsgFromDB(EMMessage.Type.TXT,0,100,userName,EMConversation.EMSearchDirection.UP);
         List<Map<String, Object>> msgList = new ArrayList<>();
         for (int i = 0; i < messages.size(); i++) {
             Map<String, Object> map = new HashMap<>();

@@ -175,9 +175,17 @@ Future<ListEMMessage> getAllMessagesMore(String username, String startMsgId) asy
 }
 
 /// 搜索消息
-Future<ListEMMessage> searchMessage(String keyWords, {String userName : ""}) async {
+Future<ListEMMessage> searchMessage(String keyWords, int time) async {
   var result = await _channel.invokeMethod("searchMessage",{
     "keyWords" : keyWords,
+    "time" : time,
+  });
+  return ListEMMessage.fromList(result);
+}
+
+/// 搜索消息
+Future<ListEMMessage> searchMessageUser(String userName) async {
+  var result = await _channel.invokeMethod("searchMessageUser",{
     "userName" : userName,
   });
   return ListEMMessage.fromList(result);
