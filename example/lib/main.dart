@@ -1,3 +1,4 @@
+import 'package:easemob_plu_example/page/CallingPage.dart';
 import 'package:easemob_plu_example/page/ChatPrivate.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -72,11 +73,23 @@ class HomeState extends State<Home> {
         //成功才能进行其他操作
         _getConversation();
         _addMessageListener();
+        _addCallRecceiverLister();
       }
     });
     // 连接异常监听
     easemob.responseFromDisConnect.listen((data) {
       print(data);
+    });
+    easemob.responseFromCallReceiver.listen((data){
+      print("---------------------------------------:" + data);
+      if (data != null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+          return CallingPage(
+            username: data,
+          );
+        }));
+      }
+
     });
     // 获取所有会话监听
     easemob.responseFromConversationGet.listen((conversation) {
@@ -270,6 +283,11 @@ class HomeState extends State<Home> {
   /// 移除消息监听
   Future<void> _removeMsgListener() async {
     var result = await easemob.removeMessageListener();
+  }
+
+  /// 添加语音监听
+  Future<void> _addCallRecceiverLister() async {
+    var result = await easemob.addCallReceiverChangeListener();
   }
 
   @override

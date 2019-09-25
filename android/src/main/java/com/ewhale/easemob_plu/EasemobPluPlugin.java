@@ -129,6 +129,8 @@ public class EasemobPluPlugin implements MethodCallHandler {
         EasemobHandler.searchMessage(call, result);
     } else if (call.method.equals("deleteMessage")) {
         EasemobHandler.deleteMessage(call,result);
+    } else if (call.method.equals("addCallReceiverChangeListener")) {
+        EasemobHandler.addCallReceiverChangeListener(call,result);
     } else {
       result.notImplemented();
     }

@@ -462,6 +462,12 @@ Future addGroupChangeListener() async {
   return result;
 }
 
+/// 注册通话接收监听
+Future addCallReceiverChangeListener() async {
+  var result = await _channel.invokeMethod("addCallReceiverChangeListener");
+  return result;
+}
+
 /// 注册通话状态监听
 Future addCallStateChangeListener() async {
   var result = await _channel.invokeMethod("addCallStateChangeListener");
@@ -539,7 +545,7 @@ StreamController<String> _loginController = new StreamController.broadcast();
 
 Stream<String> get responseFromLogin => _loginController.stream;
 
-/// 接收消息(仅提示是否有消息)
+/// 接收消息
 StreamController<ListEMMessage> _msgListenerController = new StreamController.broadcast();
 
 Stream<ListEMMessage> get responseFromMsgListener => _msgListenerController.stream;

@@ -266,6 +266,11 @@ class ChatPrivateState extends State<ChatPrivate> {
     _sendImageMsg(image.path);
   }
 
+  Future<void> _callToHis() async {
+    var result = await easemob.makeVoiceCall(widget.username);
+    print(result);
+  }
+
   ///键盘下菜单事件
   void _showBottomMenu() {
     setState(() {
@@ -438,6 +443,38 @@ class ChatPrivateState extends State<ChatPrivate> {
                                 ),
                                 Text(
                                   "拍照",
+                                  style: TextStyle(
+                                      fontSize: 13.0
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {_callToHis();},
+                            child: Column(
+                              children: <Widget>[
+                                new Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "语音通话",
+                                      style: TextStyle(
+                                          fontSize: 18.0
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Text(
+                                  "语音通话",
                                   style: TextStyle(
                                       fontSize: 13.0
                                   ),

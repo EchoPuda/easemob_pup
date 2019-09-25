@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.ewhale.easemob_plu.utils.CallReceiver;
 import com.ewhale.easemob_plu.utils.EaseImageUtils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
@@ -68,14 +69,14 @@ public class EasemobHandler {
         EasemobHandler.registrar = registrar;
     }
 
-    private static LocalBroadcastManager broadcastManager;
-    private static CallReceiver callReceiver = new CallReceiver();
+//    private static LocalBroadcastManager broadcastManager;
+    private static CallReceiver callReceiver;
 
     /**
      * 初始化环信
      */
     public static void initEaseMob(MethodCall call, MethodChannel.Result result) {
-        broadcastManager = LocalBroadcastManager.getInstance(registrar.context());
+//        broadcastManager = LocalBroadcastManager.getInstance(registrar.context());
         EMOptions options = new EMOptions();
         options.setAcceptInvitationAlways((boolean) call.argument("autoInvitation"));
         options.setAutoTransferMessageAttachments((boolean) call.argument("autoTransferMessageAttachments"));
@@ -92,6 +93,7 @@ public class EasemobHandler {
             //则此application:onCreate 是被service 调用的，直接返回
             return;
         }
+        callReceiver = new CallReceiver();
 
         //初始化
         EMClient.getInstance().init(registrar.context(),options);
@@ -138,7 +140,6 @@ public class EasemobHandler {
                     }
                 });
 
-
                 EMClient.getInstance().addConnectionListener(new MyConnectionListener());
                 EMClient.getInstance().contactManager().setContactListener(new EMContactListener() {
                     @Override
@@ -172,9 +173,6 @@ public class EasemobHandler {
                     }
                 });
 
-                IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
-                broadcastManager.registerReceiver(callReceiver, callFilter);
-
             }
 
             @Override
@@ -195,23 +193,34 @@ public class EasemobHandler {
         });
     }
 
-    private static class CallReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // 拨打方username
-            String from = intent.getStringExtra("from");
-            // call type
-            String type = intent.getStringExtra("type");
-            //跳转到通话页面
-            EasemobResponseHandler.onCallReceive(from,type);
-
+    public static void addCallReceiverChangeListener(MethodCall call, MethodChannel.Result result) {
+        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
+        if(callReceiver == null){
+            callReceiver = new CallReceiver();
         }
+        registrar.context().registerReceiver(callReceiver, callFilter);
     }
 
-    private static void unregisterBroadcastReceiver() {
-        broadcastManager.unregisterReceiver(callReceiver);
-    }
+//    private static class CallReceiver extends BroadcastReceiver {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            // 拨打方username
+//            String from = intent.getStringExtra("from");
+//            // call type
+//            String type = intent.getStringExtra("type");
+//            System.out.println("-------------------------");
+//            System.out.println(from);
+//            System.out.println("-------------------------");
+//            //跳转到通话页面
+//            EasemobResponseHandler.onCallReceive(from,type);
+//
+//        }
+//    }
+
+//    private static void unregisterBroadcastReceiver() {
+//        broadcastManager.unregisterReceiver(callReceiver);
+//    }
 
     /**
      * 连接状态监听
@@ -253,7 +262,7 @@ public class EasemobHandler {
      * 退出登录
      */
     public static void logout(MethodCall call, MethodChannel.Result result) {
-        unregisterBroadcastReceiver();
+//        unregisterBroadcastReceiver();
         EMClient.getInstance().logout(true);
     }
 
