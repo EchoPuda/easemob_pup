@@ -698,7 +698,14 @@ public class EasemobHandler {
     public static void getAllMessagesMore(MethodCall call, MethodChannel.Result result) {
         String username = call.argument("username");
         String startMsgId = call.argument("startMsgId");
-        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        EMConversation conversation;
+        if ((int)call.argument("chatType") == 2) {
+            conversation = EMClient.getInstance().chatManager().getConversation(username, EMConversation.EMConversationType.ChatRoom);
+        } else if ((int)call.argument("chatType") == 1) {
+            conversation = EMClient.getInstance().chatManager().getConversation(username, EMConversation.EMConversationType.GroupChat);
+        } else  {
+            conversation = EMClient.getInstance().chatManager().getConversation(username, EMConversation.EMConversationType.Chat);
+        }
         //获取startMsgId之前的pagesize条消息，此方法获取的messages SDK会自动存入到此会话中，APP中无需再次把获取到的messages添加到会话中
         List<EMMessage> messages = conversation.loadMoreMsgFromDB(startMsgId, 20);
         List<Map<String, Object>> msgList = new ArrayList<>();
@@ -765,7 +772,7 @@ public class EasemobHandler {
     }
 
     /**
-     * 搜索消息
+     * 删除消息
      */
     public static void deleteMessage(MethodCall call, MethodChannel.Result result) {
         String username = call.argument("username");
