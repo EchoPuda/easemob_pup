@@ -480,7 +480,8 @@ public class EasemobHandler {
      * 获取聊天记录
      */
     public static void getAllMessages(MethodCall call, MethodChannel.Result result) {
-        assert call.argument("username") != null;
+        String username = call.argument("username");
+        System.out.println(username);
         EMConversation conversation;
         if ((int)call.argument("chatType") == 2) {
             conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"), EMConversation.EMConversationType.ChatRoom);
