@@ -489,8 +489,9 @@ public class EasemobHandler {
         } else  {
             conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"), EMConversation.EMConversationType.Chat);
         }
+        System.out.println("conversation: " + conversation);
         //获取此会话的所有消息
-        if (conversation.getAllMessages() != null) {
+        if (conversation != null) {
             List<EMMessage> messages = conversation.getAllMessages();
             List<Map<String, Object>> msgList = new ArrayList<>();
             for (int i = 0; i < messages.size(); i++) {
