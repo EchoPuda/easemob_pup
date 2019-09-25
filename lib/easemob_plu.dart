@@ -166,10 +166,11 @@ Future<ListEMMessage> getAllMessages(String username,{int chatType : 0}) async {
 }
 
 /// 获取更多聊天记录
-Future<ListEMMessage> getAllMessagesMore(String username, String startMsgId) async {
+Future<ListEMMessage> getAllMessagesMore(String username, String startMsgId,{int chatType : 0}) async {
   var result = await _channel.invokeMethod("getAllMessagesMore",{
     "username" : username,
     "startMsgId" : startMsgId,
+    "chatType" : chatType,
   });
   return ListEMMessage.fromList(result);
 }
