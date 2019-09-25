@@ -234,10 +234,11 @@ Future deleteConversation(String username, {bool isDelHistory : true}) async {
 }
 
 /// 删除某条消息
-Future deleteMessage(String username, String msgId) async {
+Future deleteMessage(String username, String msgId, {int chatType : 0}) async {
   String result = await _channel.invokeMethod("deleteMessage",{
     "username" : username,
     "msgId" : msgId,
+    "chatType" : chatType,
   });
   return result;
 }

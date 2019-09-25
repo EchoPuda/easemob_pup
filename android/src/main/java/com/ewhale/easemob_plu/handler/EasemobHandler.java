@@ -773,9 +773,21 @@ public class EasemobHandler {
     public static void deleteMessage(MethodCall call, MethodChannel.Result result) {
         String username = call.argument("username");
         String msgId = call.argument("msgId");
-        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
-        conversation.removeMessage(msgId);
-        result.success("success");
+        EMConversation conversation;
+        if ((int)call.argument("chatType") == 2) {
+            conversation = EMClient.getInstance().chatManager().getConversation(username, EMConversation.EMConversationType.ChatRoom);
+        } else if ((int)call.argument("chatType") == 1) {
+            conversation = EMClient.getInstance().chatManager().getConversation(username, EMConversation.EMConversationType.GroupChat);
+        } else  {
+            conversation = EMClient.getInstance().chatManager().getConversation(username, EMConversation.EMConversationType.Chat);
+        }
+        if (conversation != null) {
+            conversation.removeMessage(msgId);
+            result.success("success");
+        } else {
+            result.success("error");
+        }
+
     }
 
     /**
