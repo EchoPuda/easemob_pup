@@ -274,6 +274,7 @@ public class EasemobHandler {
         }
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
+        result.success(message.getMsgId());
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -281,7 +282,6 @@ public class EasemobHandler {
                     @Override
                     public void run() {
                         EasemobResponseHandler.onMsgSendState("success");
-                        result.success("success");
                     }
                 });
             }
@@ -292,7 +292,6 @@ public class EasemobHandler {
                     @Override
                     public void run() {
                         EasemobResponseHandler.onMsgSendState("error");
-                        result.success("error");
                     }
                 });
             }
@@ -322,6 +321,7 @@ public class EasemobHandler {
         }
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
+        result.success(message.getMsgId());
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -329,7 +329,6 @@ public class EasemobHandler {
                     @Override
                     public void run() {
                         EasemobResponseHandler.onMsgSendState("success");
-                        result.success("success");
                     }
                 });
             }
@@ -340,7 +339,6 @@ public class EasemobHandler {
                     @Override
                     public void run() {
                         EasemobResponseHandler.onMsgSendState("error");
-                        result.success("error");
                     }
                 });
             }
@@ -376,6 +374,7 @@ public class EasemobHandler {
         }
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
+        result.success(message.getMsgId());
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -384,7 +383,6 @@ public class EasemobHandler {
                     @Override
                     public void run() {
                         EasemobResponseHandler.onMsgSendState("success");
-                        result.success("success");
                     }
                 });
 
@@ -397,7 +395,6 @@ public class EasemobHandler {
                     @Override
                     public void run() {
                         EasemobResponseHandler.onMsgSendState("error");
-                        result.success("error");
                     }
                 });
 
