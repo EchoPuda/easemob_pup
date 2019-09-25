@@ -558,6 +558,9 @@ public class EasemobHandler {
         //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
     }
 
+    /**
+     * 搜索消息
+     */
     public static void searchMessage(MethodCall call, MethodChannel.Result result) {
         String keyWords = call.argument("keyWords");
         int time = (int)call.argument("time");
@@ -761,6 +764,17 @@ public class EasemobHandler {
             msgList.add(map);
         }
         result.success(msgList);
+    }
+
+    /**
+     * 搜索消息
+     */
+    public static void deleteMessage(MethodCall call, MethodChannel.Result result) {
+        String username = call.argument("username");
+        String msgId = call.argument("msgId");
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        conversation.removeMessage(msgId);
+        result.success("success");
     }
 
     /**

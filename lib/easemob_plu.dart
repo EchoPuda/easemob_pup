@@ -233,6 +233,15 @@ Future deleteConversation(String username, {bool isDelHistory : true}) async {
   return result;
 }
 
+/// 删除某条消息
+Future deleteMessage(String username, String msgId) async {
+  String result = await _channel.invokeMethod("deleteMessage",{
+    "username" : username,
+    "msgId" : msgId,
+  });
+  return result;
+}
+
 /// 获取好友列表
 /// 获取环信服务器上所有的，对应好友详情，分组等，需要到自己服务器上获取
 Future<List<String>> getAllContactsFromServer() async {
