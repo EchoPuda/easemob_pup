@@ -481,7 +481,14 @@ public class EasemobHandler {
      */
     public static void getAllMessages(MethodCall call, MethodChannel.Result result) {
         assert call.argument("username") != null;
-        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"));
+        EMConversation conversation;
+        if ((int)call.argument("chatType") == 2) {
+            conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"), EMConversation.EMConversationType.ChatRoom);
+        } else if ((int)call.argument("chatType") == 1) {
+            conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"), EMConversation.EMConversationType.GroupChat);
+        } else  {
+            conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"), EMConversation.EMConversationType.Chat);
+        }
         //获取此会话的所有消息
         if (conversation.getAllMessages() != null) {
             List<EMMessage> messages = conversation.getAllMessages();
