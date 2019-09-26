@@ -109,6 +109,8 @@ public class EasemobPluPlugin implements MethodCallHandler {
         EasemobHandler.addGroupChangeListener(call,result);
     } else if (call.method.equals("addCallStateChangeListener")) {
         EasemobHandler.addCallStateChangeListener(call,result);
+    } else if (call.method.equals("removeCallStateChangeListener")) {
+        EasemobHandler.removeCallStateChangeListener(call,result);
     } else if (call.method.equals("makeVoiceCall")) {
         EasemobHandler.makeVoiceCall(call, result);
     } else if (call.method.equals("answerCall")) {
@@ -131,6 +133,14 @@ public class EasemobPluPlugin implements MethodCallHandler {
         EasemobHandler.deleteMessage(call,result);
     } else if (call.method.equals("addCallReceiverChangeListener")) {
         EasemobHandler.addCallReceiverChangeListener(call,result);
+    } else if (call.method.equals("pauseVoice")) {
+        EasemobHandler.pauseVoice(call,result);
+    } else if (call.method.equals("resumeVoice")) {
+        EasemobHandler.resumeVoice(call,result);
+    } else if (call.method.equals("openSpeaker")) {
+        EasemobHandler.openSpeaker(call,result);
+    } else if (call.method.equals("closeSpeaker")) {
+        EasemobHandler.closeSpeaker(call,result);
     } else {
       result.notImplemented();
     }

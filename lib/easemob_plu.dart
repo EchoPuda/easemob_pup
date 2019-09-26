@@ -474,6 +474,12 @@ Future addCallStateChangeListener() async {
   return result;
 }
 
+/// 注销通话状态监听
+Future removeCallStateChangeListener() async {
+  var result = await _channel.invokeMethod("removeCallStateChangeListener");
+  return result;
+}
+
 /// 拨打语音通话
 Future makeVoiceCall(String username) async {
   var result = await _channel.invokeMethod("makeVoiceCall",{
@@ -497,6 +503,30 @@ Future rejectCall() async {
 /// 挂断通话
 Future endCall() async {
   var result = await _channel.invokeMethod("endCall");
+  return result;
+}
+
+/// 暂停语音数据
+Future pauseVoice() async {
+  var result = await _channel.invokeMethod("pauseVoice");
+  return result;
+}
+
+/// 重新加载语音数据
+Future resumeVoice() async {
+  var result = await _channel.invokeMethod("resumeVoice");
+  return result;
+}
+
+/// 打开扬声器
+Future openSpeaker() async {
+  var result = await _channel.invokeMethod("openSpeaker");
+  return result;
+}
+
+/// 关闭扬声器
+Future closeSpeaker() async {
+  var result = await _channel.invokeMethod("closeSpeaker");
   return result;
 }
 

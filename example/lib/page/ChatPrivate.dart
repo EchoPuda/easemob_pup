@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:easemob_plu/easemob_plu.dart' as easemob;
 import 'package:image_picker/image_picker.dart';
 
+import 'CallingPage.dart';
+
 /// 私聊
 /// @author puppet
 class ChatPrivate extends StatefulWidget {
@@ -268,7 +270,12 @@ class ChatPrivateState extends State<ChatPrivate> {
 
   Future<void> _callToHis() async {
     var result = await easemob.makeVoiceCall(widget.username);
-    print(result);
+    Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+      return CallingPage(
+        username: widget.username,
+        callIn: false,
+      );
+    }));
   }
 
   ///键盘下菜单事件

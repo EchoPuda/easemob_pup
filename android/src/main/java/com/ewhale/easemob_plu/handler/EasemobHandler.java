@@ -8,10 +8,16 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import com.ewhale.easemob_plu.R;
 import com.ewhale.easemob_plu.utils.CallReceiver;
 import com.ewhale.easemob_plu.utils.EaseImageUtils;
+import com.ewhale.easemob_plu.utils.PhoneStateManager;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -71,6 +77,8 @@ public class EasemobHandler {
 
 //    private static LocalBroadcastManager broadcastManager;
     private static CallReceiver callReceiver;
+    private static boolean isMuteState;
+    protected static AudioManager audioManager;
 
     /**
      * 初始化环信
@@ -93,7 +101,6 @@ public class EasemobHandler {
             //则此application:onCreate 是被service 调用的，直接返回
             return;
         }
-        callReceiver = new CallReceiver();
 
         //初始化
         EMClient.getInstance().init(registrar.context(),options);
@@ -200,27 +207,6 @@ public class EasemobHandler {
         }
         registrar.context().registerReceiver(callReceiver, callFilter);
     }
-
-//    private static class CallReceiver extends BroadcastReceiver {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            // 拨打方username
-//            String from = intent.getStringExtra("from");
-//            // call type
-//            String type = intent.getStringExtra("type");
-//            System.out.println("-------------------------");
-//            System.out.println(from);
-//            System.out.println("-------------------------");
-//            //跳转到通话页面
-//            EasemobResponseHandler.onCallReceive(from,type);
-//
-//        }
-//    }
-
-//    private static void unregisterBroadcastReceiver() {
-//        broadcastManager.unregisterReceiver(callReceiver);
-//    }
 
     /**
      * 连接状态监听
@@ -1383,43 +1369,182 @@ public class EasemobHandler {
         });
     }
 
+    public static EMCallStateChangeListener callStateListener;
+
     /**
      * 注册通话状态监听
      */
     public static void addCallStateChangeListener(MethodCall call, MethodChannel.Result result) {
-        EMClient.getInstance().callManager().addCallStateChangeListener(new EMCallStateChangeListener() {
+        audioManager = (AudioManager) registrar.activity().getSystemService(Context.AUDIO_SERVICE);
+        callStateListener = new EMCallStateChangeListener() {
             @Override
             public void onCallStateChanged(CallState callState, CallError error) {
                 switch (callState) {
                     case CONNECTING: // 正在连接对方
-                        EasemobResponseHandler.onCallStateChange(1);
+                        registrar.activity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EasemobResponseHandler.onCallStateChange(1);
+                            }
+                        });
                         break;
                     case CONNECTED: // 双方已经建立连接
-                        EasemobResponseHandler.onCallStateChange(2);
+                        registrar.activity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EasemobResponseHandler.onCallStateChange(2);
+                            }
+                        });
                         break;
 
                     case ACCEPTED: // 电话接通成功
-                        EasemobResponseHandler.onCallStateChange(0);
+                        closeSpeakerOn();
+                        registrar.activity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                PhoneStateManager.get(registrar.activity()).addStateCallback(phoneStateCallback);
+                                EasemobResponseHandler.onCallStateChange(0);
+                                try {
+                                    EMClient.getInstance().callManager().resumeVoiceTransfer();
+                                } catch (HyphenateException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                         break;
                     case DISCONNECTED: // 电话断了
-                        EasemobResponseHandler.onCallStateChange(-1);
+                        registrar.activity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                PhoneStateManager.get(registrar.activity()).removeStateCallback(phoneStateCallback);
+                                EasemobResponseHandler.onCallStateChange(-1);
+                            }
+                        });
                         break;
                     case NETWORK_UNSTABLE: //网络不稳定
                         if(error == CallError.ERROR_NO_DATA){
                             //无通话数据
-                            EasemobResponseHandler.onCallStateChange(-2);
+                            registrar.activity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    EasemobResponseHandler.onCallStateChange(-2);
+                                }
+                            });
                         }else{
-                            EasemobResponseHandler.onCallStateChange(-2);
+                            registrar.activity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    EasemobResponseHandler.onCallStateChange(-2);
+                                }
+                            });
                         }
                         break;
                     case NETWORK_NORMAL: //网络恢复正常
-                        EasemobResponseHandler.onCallStateChange(3);
+                        registrar.activity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EasemobResponseHandler.onCallStateChange(3);
+                            }
+                        });
                         break;
                     default:
                         break;
                 }
             }
-        });
+        };
+        EMClient.getInstance().callManager().addCallStateChangeListener(callStateListener);
+    }
+
+    public static void removeCallStateChangeListener(MethodCall call, MethodChannel.Result result) {
+        audioManager.setMode(AudioManager.MODE_NORMAL);
+        audioManager.setMicrophoneMute(false);
+
+        if(callStateListener != null) {
+            EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
+        }
+
+    }
+
+    public static void openSpeaker(MethodCall call, MethodChannel.Result result) {
+        openSpeakerOn();
+    }
+
+    public static void closeSpeaker(MethodCall call, MethodChannel.Result result) {
+        closeSpeakerOn();
+    }
+
+    protected static void openSpeakerOn() {
+        try {
+            if (!audioManager.isSpeakerphoneOn()) {
+                audioManager.setSpeakerphoneOn(true);
+            }
+            audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected static void closeSpeakerOn() {
+        try {
+            if (audioManager != null) {
+                if (audioManager.isSpeakerphoneOn()) {
+                    audioManager.setSpeakerphoneOn(false);
+                }
+                audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static PhoneStateManager.PhoneStateCallback phoneStateCallback = new PhoneStateManager.PhoneStateCallback() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:   // 电话响铃
+                    break;
+                case TelephonyManager.CALL_STATE_IDLE:      // 电话挂断
+                    // resume current voice conference.
+                    if (isMuteState) {
+                        try {
+                            EMClient.getInstance().callManager().resumeVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:   // 来电接通 或者 去电，去电接通  但是没法区分
+                    // pause current voice conference.
+                    if (!isMuteState) {
+                        try {
+                            EMClient.getInstance().callManager().pauseVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+            }
+        }
+    };
+
+    public static void pauseVoice(MethodCall call, MethodChannel.Result result) {
+        try {
+            EMClient.getInstance().callManager().pauseVoiceTransfer();
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+        }
+        isMuteState = true;
+    }
+
+    public static void resumeVoice(MethodCall call, MethodChannel.Result result) {
+        try {
+            EMClient.getInstance().callManager().resumeVoiceTransfer();
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+        }
+        isMuteState = false;
     }
 
     /**
