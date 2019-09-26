@@ -794,7 +794,12 @@ public class EasemobHandler {
      */
     public static void getUnreadMsgCount(MethodCall call, MethodChannel.Result result) {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"));
-        result.success(conversation.getUnreadMsgCount());
+        if (conversation != null) {
+            result.success(conversation.getUnreadMsgCount());
+        } else {
+            result.success(0);
+        }
+
     }
 
     /**
@@ -807,8 +812,10 @@ public class EasemobHandler {
             EMClient.getInstance().chatManager().markAllConversationsAsRead();
         } else {
             EMConversation conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"));
-            //指定会话消息未读数清零
-            conversation.markAllMessagesAsRead();
+            if (conversation != null) {
+                //指定会话消息未读数清零
+                conversation.markAllMessagesAsRead();
+            }
         }
     }
 
