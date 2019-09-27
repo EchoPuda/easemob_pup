@@ -408,7 +408,7 @@ Future leaveGroup(String groupId) async {
   return result;
 }
 
-/// 退出群组
+/// 解散群组
 Future destroyGroup(String groupId) async {
   String result = await _channel.invokeMethod("destroyGroup",{
     "groupId" : groupId,

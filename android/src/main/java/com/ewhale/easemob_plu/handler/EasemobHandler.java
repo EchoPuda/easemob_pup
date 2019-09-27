@@ -185,6 +185,8 @@ public class EasemobHandler {
             @Override
             public void onError(int code, String error) {
                 Log.d("main", "登录聊天服务器失败！");
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
