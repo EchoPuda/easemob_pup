@@ -251,7 +251,34 @@ public class EasemobHandler {
      */
     public static void logout(MethodCall call, MethodChannel.Result result) {
 //        unregisterBroadcastReceiver();
-        EMClient.getInstance().logout(true);
+        EMClient.getInstance().logout(true, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                System.out.println("退出成功");
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.success("success");
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.success("success");
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
+
     }
 
     /**
