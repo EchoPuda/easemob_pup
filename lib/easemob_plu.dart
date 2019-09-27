@@ -200,6 +200,12 @@ Future<int> getUnreadMsgCount(String username) async {
   return result;
 }
 
+/// 获取未读消息数量
+Future<int> getUnreadMessageCountAll() async {
+  int result = await _channel.invokeMethod("getUnreadMessageCountAll");
+  return result;
+}
+
 /// 未读消息数清零
 /// username为用户id或群聊id : 指定会话消息未读数清零
 /// username为空 : 所有未读消息数清零

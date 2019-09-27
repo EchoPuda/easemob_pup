@@ -36,56 +36,51 @@ class CallingPageState extends State<CallingPage> {
     statusText = widget.callIn ? "邀请你进行语音通话" : "正在等待对方接收邀请";
     _addCallStateListener();
     easemob.responseFromCallStateChange.listen((result){
-      if (timeLead == 0) {
-        timeLead = DateTime.now().millisecondsSinceEpoch;
-      } else {
-        if (DateTime.now().millisecondsSinceEpoch - timeLead >= 100) {
-          timeLead = DateTime.now().millisecondsSinceEpoch;
-          switch(result) {
-            case 0: {
-              setState(() {
-                statusText = "";
-                _timeValue = "00:00";
-                isCalling = true;
-                isActive = true;
-              });
-              _resumeVoice();
-              break;
-            }
-            case 1: {
-              setState(() {
-                statusText = "正在连接";
-              });
-              break;
-            }
-            case 2: {
-              setState(() {
-                statusText = "";
-              });
-              break;
-            }
-            case 3: {
-              setState(() {
-                statusText = "";
-              });
-              break;
-            }
-            case -1: {
-              setState(() {
-                statusText = "通话已结束";
-                isActive = false;
-                timer.cancel();
-                Navigator.of(context).pop();
-              });
-              break;
-            }
-            case -2: {
-              setState(() {
-                statusText = "网络不稳定";
-              });
-              break;
-            }
-          }
+      switch(result) {
+        case 0: {
+          setState(() {
+            statusText = "";
+            _timeValue = "00:00";
+            isCalling = true;
+            isActive = true;
+          });
+          _resumeVoice();
+          break;
+        }
+        case 1: {
+          setState(() {
+            statusText = "正在连接";
+          });
+          break;
+        }
+        case 2: {
+          setState(() {
+            statusText = "";
+          });
+          break;
+        }
+        case 3: {
+          setState(() {
+            statusText = "";
+          });
+          break;
+        }
+        case -1: {
+          setState(() {
+            statusText = "通话已结束";
+            isActive = false;
+            timer.cancel();
+            new Timer(Duration(milliseconds: 300), (){
+              Navigator.of(context).pop();
+            });
+          });
+          break;
+        }
+        case -2: {
+          setState(() {
+            statusText = "网络不稳定";
+          });
+          break;
         }
       }
 

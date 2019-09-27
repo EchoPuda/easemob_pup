@@ -57,6 +57,8 @@ public class EasemobPluPlugin implements MethodCallHandler {
       EasemobHandler.getAllMessagesMore(call,result);
     } else if (call.method.equals("getUnreadMsgCount")) {
       EasemobHandler.getUnreadMsgCount(call,result);
+    } else if (call.method.equals("getUnreadMessageCountAll")) {
+        EasemobHandler.getUnreadMessageCountAll(call,result);
     } else if (call.method.equals("getMsgAsRead")) {
       EasemobHandler.getMsgAsRead(call,result);
     } else if (call.method.equals("getAllMsgCount")) {

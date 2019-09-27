@@ -803,6 +803,14 @@ public class EasemobHandler {
     }
 
     /**
+     * 获取未读消息总数
+     */
+    public static void getUnreadMessageCountAll(MethodCall call, MethodChannel.Result result) {
+        int count = EMClient.getInstance().chatManager().getUnreadMessageCount();
+        result.success(count);
+    }
+
+    /**
      * 未读消息数清零
      */
     public static void getMsgAsRead(MethodCall call, MethodChannel.Result result) {
