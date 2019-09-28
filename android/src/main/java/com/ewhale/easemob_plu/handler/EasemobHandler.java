@@ -253,12 +253,22 @@ public class EasemobHandler {
             @Override
             public void onSuccess() {
                 System.out.println("退出成功");
-                result.success("success");
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.success("success");
+                    }
+                });
             }
 
             @Override
             public void onError(int code, String error) {
-                result.success("error");
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.success("error");
+                    }
+                });
             }
 
             @Override
