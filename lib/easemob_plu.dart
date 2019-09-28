@@ -408,6 +408,22 @@ Future leaveGroup(String groupId) async {
   return result;
 }
 
+/// 屏蔽群消息
+Future blockGroupMessage(String groupId) async {
+  String result = await _channel.invokeMethod("blockGroupMessage",{
+    "groupId" : groupId,
+  });
+  return result;
+}
+
+/// 解除屏蔽群消息
+Future unblockGroupMessage(String groupId) async {
+  String result = await _channel.invokeMethod("unblockGroupMessage",{
+    "groupId" : groupId,
+  });
+  return result;
+}
+
 /// 解散群组
 Future destroyGroup(String groupId) async {
   String result = await _channel.invokeMethod("destroyGroup",{

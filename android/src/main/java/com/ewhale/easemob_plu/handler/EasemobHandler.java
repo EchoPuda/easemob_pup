@@ -1172,6 +1172,32 @@ public class EasemobHandler {
     }
 
     /**
+     * 解散群组
+     */
+    public static void blockGroupMessage(MethodCall call, MethodChannel.Result result) {
+        String groupId = call.argument("groupId");
+        try {
+            EMClient.getInstance().groupManager().blockGroupMessage(groupId);
+            result.success("success");
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 解散群组
+     */
+    public static void unblockGroupMessage(MethodCall call, MethodChannel.Result result) {
+        String groupId = call.argument("groupId");
+        try {
+            EMClient.getInstance().groupManager().unblockGroupMessage(groupId);
+            result.success("success");
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 获取完整的群成员列表
      */
     public static void fetchGroupMembers(MethodCall call, MethodChannel.Result result) {

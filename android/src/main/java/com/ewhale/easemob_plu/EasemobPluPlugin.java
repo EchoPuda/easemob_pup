@@ -143,6 +143,10 @@ public class EasemobPluPlugin implements MethodCallHandler {
         EasemobHandler.openSpeaker(call,result);
     } else if (call.method.equals("closeSpeaker")) {
         EasemobHandler.closeSpeaker(call,result);
+    } else if (call.method.equals("blockGroupMessage")) {
+        EasemobHandler.blockGroupMessage(call,result);
+    } else if (call.method.equals("unblockGroupMessage  ")) {
+        EasemobHandler.unblockGroupMessage(call,result);
     } else {
       result.notImplemented();
     }
