@@ -573,7 +573,7 @@ public class EasemobHandler {
      */
     public static void searchMessage(MethodCall call, MethodChannel.Result result) {
         String keyWords = call.argument("keyWords");
-        int time = (int)call.argument("time");
+        long time = (long)call.argument("time");
         List<EMMessage> messages = EMClient.getInstance().chatManager().searchMsgFromDB(keyWords,time,100,null,EMConversation.EMSearchDirection.UP);
         List<Map<String, Object>> msgList = new ArrayList<>();
         for (int i = 0; i < messages.size(); i++) {
