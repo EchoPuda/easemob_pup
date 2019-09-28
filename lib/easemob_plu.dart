@@ -184,7 +184,7 @@ Future<ListEMMessage> searchMessage(String keyWords, int time) async {
   return ListEMMessage.fromList(result);
 }
 
-/// 搜索消息
+/// 搜索用户
 Future<ListEMMessage> searchMessageUser(String userName) async {
   var result = await _channel.invokeMethod("searchMessageUser",{
     "userName" : userName,

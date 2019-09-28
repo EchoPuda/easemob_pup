@@ -584,7 +584,7 @@ public class EasemobHandler {
     public static void searchMessage(MethodCall call, MethodChannel.Result result) {
         String keyWords = call.argument("keyWords");
         long time = (long)call.argument("time");
-        List<EMMessage> messages = EMClient.getInstance().chatManager().searchMsgFromDB(keyWords,time,100,null,EMConversation.EMSearchDirection.UP);
+        List<EMMessage> messages = EMClient.getInstance().chatManager().searchMsgFromDB(keyWords,time,50,null, EMConversation.EMSearchDirection.UP);
         List<Map<String, Object>> msgList = new ArrayList<>();
         for (int i = 0; i < messages.size(); i++) {
             Map<String, Object> map = new HashMap<>();
@@ -650,7 +650,8 @@ public class EasemobHandler {
 
     public static void searchMessageUser(MethodCall call, MethodChannel.Result result) {
         String userName = call.argument("userName");
-        List<EMMessage> messages = EMClient.getInstance().chatManager().searchMsgFromDB(EMMessage.Type.TXT,0,100,userName,EMConversation.EMSearchDirection.UP);
+        long time = (long)call.argument("time");
+        List<EMMessage> messages = EMClient.getInstance().chatManager().searchMsgFromDB(EMMessage.Type.TXT,time,50,userName,EMConversation.EMSearchDirection.UP);
         List<Map<String, Object>> msgList = new ArrayList<>();
         for (int i = 0; i < messages.size(); i++) {
             Map<String, Object> map = new HashMap<>();
