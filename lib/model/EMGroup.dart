@@ -10,6 +10,7 @@ class EMGroup {
   final int groupCount;
   final List<String> members;
   final int groupMaxCount;
+  final bool isMsgBlocked;
 
   EMGroup.fromMap(Map map)
       : groupId = map["groupId"],
@@ -19,6 +20,7 @@ class EMGroup {
         adminList = map["adminList"],
         groupCount = map["groupCount"],
         members = map["members"],
-        groupMaxCount = map["groupMaxCount"];
+        groupMaxCount = map["groupMaxCount"],
+        isMsgBlocked = map["isMsgBlocked"];
 
 }

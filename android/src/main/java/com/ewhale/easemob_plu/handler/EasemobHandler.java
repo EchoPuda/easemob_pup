@@ -1329,6 +1329,7 @@ public class EasemobHandler {
             map.put("groupCount",groupCount);
             map.put("members",members);
             map.put("groupMaxCount",groupMaxCount);
+            map.put("isMsgBlocked",group.isMsgBlocked());
             result.success(map);
         } catch (HyphenateException e) {
             e.printStackTrace();
