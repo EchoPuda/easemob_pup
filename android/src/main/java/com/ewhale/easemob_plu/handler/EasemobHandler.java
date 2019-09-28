@@ -1172,29 +1172,39 @@ public class EasemobHandler {
     }
 
     /**
-     * 解散群组
+     * 屏蔽群组
      */
     public static void blockGroupMessage(MethodCall call, MethodChannel.Result result) {
         String groupId = call.argument("groupId");
-        try {
-            EMClient.getInstance().groupManager().blockGroupMessage(groupId);
-            result.success("success");
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
+        registrar.activity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    EMClient.getInstance().groupManager().blockGroupMessage(groupId);
+                    result.success("success");
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
-     * 解散群组
+     * 解除屏蔽群组
      */
     public static void unblockGroupMessage(MethodCall call, MethodChannel.Result result) {
         String groupId = call.argument("groupId");
-        try {
-            EMClient.getInstance().groupManager().unblockGroupMessage(groupId);
-            result.success("success");
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
+        registrar.activity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    EMClient.getInstance().groupManager().unblockGroupMessage(groupId);
+                    result.success("success");
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
@@ -1257,12 +1267,17 @@ public class EasemobHandler {
     public static void changeGroupName(MethodCall call, MethodChannel.Result result) {
         String groupId = call.argument("groupId");
         String changedGroupName = call.argument("changedGroupName");
-        try {
-            EMClient.getInstance().groupManager().changeGroupName(groupId,changedGroupName);
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
-        result.success("success");
+        registrar.activity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    EMClient.getInstance().groupManager().changeGroupName(groupId,changedGroupName);
+                    result.success("success");
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
