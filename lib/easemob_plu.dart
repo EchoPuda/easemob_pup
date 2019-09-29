@@ -702,6 +702,12 @@ Stream<String> get responseFromCallReceiver => _onCallReceiverController.stream;
 /// 3 网络恢复正常
 /// -1 电话断了   只有断了之后才能关闭通话界面（保证通话所占用的资源都释放完）
 /// -2 网络不稳定
+/// -----以下是error状态
+/// -3 对方拒绝
+/// -4 对方不在线
+/// -5 连接失败
+/// -6 无人接听
+/// -7 对方正忙
 StreamController<int> _onCallStateChangeController = new StreamController.broadcast();
 
 Stream<int> get responseFromCallStateChange => _onCallStateChangeController.stream;

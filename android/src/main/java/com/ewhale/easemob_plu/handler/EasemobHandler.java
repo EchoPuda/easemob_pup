@@ -1497,6 +1497,55 @@ public class EasemobHandler {
                         });
                         break;
                     case DISCONNECTED: // 电话断了
+                        switch (error) {
+                            case REJECTED: //拒接
+                                registrar.activity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        PhoneStateManager.get(registrar.activity()).removeStateCallback(phoneStateCallback);
+                                        EasemobResponseHandler.onCallStateChange(-3);
+                                    }
+                                });
+                                break;
+                            case ERROR_UNAVAILABLE: //对方不在线
+                                registrar.activity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        PhoneStateManager.get(registrar.activity()).removeStateCallback(phoneStateCallback);
+                                        EasemobResponseHandler.onCallStateChange(-4);
+                                    }
+                                });
+                                break;
+                            case ERROR_TRANSPORT: //连接失败
+                                registrar.activity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        PhoneStateManager.get(registrar.activity()).removeStateCallback(phoneStateCallback);
+                                        EasemobResponseHandler.onCallStateChange(-5);
+                                    }
+                                });
+                                break;
+                            case ERROR_NORESPONSE: //无人接听
+                                registrar.activity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        PhoneStateManager.get(registrar.activity()).removeStateCallback(phoneStateCallback);
+                                        EasemobResponseHandler.onCallStateChange(-6);
+                                    }
+                                });
+                                break;
+                            case ERROR_BUSY: //对方正忙
+                                registrar.activity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        PhoneStateManager.get(registrar.activity()).removeStateCallback(phoneStateCallback);
+                                        EasemobResponseHandler.onCallStateChange(-7);
+                                    }
+                                });
+                                break;
+                            default:
+                                break;
+                        }
                         registrar.activity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1531,9 +1580,26 @@ public class EasemobHandler {
                             }
                         });
                         break;
+                    case RINGING: //正在拨入
+                        registrar.activity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EasemobResponseHandler.onCallStateChange(4);
+                            }
+                        });
+                        break;
+                    case ANSWERING: //正在接听
+                        registrar.activity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EasemobResponseHandler.onCallStateChange(5);
+                            }
+                        });
+                        break;
                     default:
                         break;
                 }
+
             }
         };
         EMClient.getInstance().callManager().addCallStateChangeListener(callStateListener);
