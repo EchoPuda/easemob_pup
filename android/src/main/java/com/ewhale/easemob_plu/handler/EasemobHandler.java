@@ -1091,7 +1091,7 @@ public class EasemobHandler {
     }
 
     /**
-     * 群组加人(群主)
+     * 群组加人(管理员)
      */
     public static void addUsersToGroup(MethodCall call, MethodChannel.Result result) {
         String groupId = call.argument("groupId");
@@ -1121,7 +1121,7 @@ public class EasemobHandler {
     }
 
     /**
-     * 群组加人(群主)
+     * 群组加人
      */
     public static void inviteUser(MethodCall call, MethodChannel.Result result) {
         String groupId = call.argument("groupId");
@@ -1335,7 +1335,6 @@ public class EasemobHandler {
         } catch (HyphenateException e) {
             e.printStackTrace();
         }
-        result.success("success");
     }
 
     /**
