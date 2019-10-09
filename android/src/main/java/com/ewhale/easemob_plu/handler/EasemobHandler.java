@@ -1347,31 +1347,43 @@ public class EasemobHandler {
      */
     public static void getGroupFromServer(MethodCall call, MethodChannel.Result result) {
         String groupId = call.argument("groupId");
-        try {
-            //根据群组ID从服务器获取群组基本信息
-            assert groupId != null;
-            EMGroup group = EMClient.getInstance().groupManager().getGroupFromServer(groupId);
-            String groupOwner = group.getOwner();
-            String groupName = group.getGroupName();
-            String groupDescription = group.getDescription();
-            List<String> adminList = group.getAdminList();
-            int groupCount = group.getMemberCount();
-            List<String> members = group.getMembers();
-            int groupMaxCount = group.getMaxUserCount();
-            Map<String, Object> map = new HashMap<>();
-            map.put("groupId",groupId);
-            map.put("groupOwner",groupOwner);
-            map.put("groupName",groupName);
-            map.put("groupDescription",groupDescription);
-            map.put("adminList",adminList);
-            map.put("groupCount",groupCount);
-            map.put("members",members);
-            map.put("groupMaxCount",groupMaxCount);
-            map.put("isMsgBlocked",group.isMsgBlocked());
-            result.success(map);
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //根据群组ID从服务器获取群组基本信息
+                    assert groupId != null;
+                    EMGroup group = EMClient.getInstance().groupManager().getGroupFromServer(groupId);
+                    String groupOwner = group.getOwner();
+                    String groupName = group.getGroupName();
+                    String groupDescription = group.getDescription();
+                    List<String> adminList = group.getAdminList();
+                    int groupCount = group.getMemberCount();
+                    List<String> members = group.getMembers();
+                    int groupMaxCount = group.getMaxUserCount();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("groupId",groupId);
+                    map.put("groupOwner",groupOwner);
+                    map.put("groupName",groupName);
+                    map.put("groupDescription",groupDescription);
+                    map.put("adminList",adminList);
+                    map.put("groupCount",groupCount);
+                    map.put("members",members);
+                    map.put("groupMaxCount",groupMaxCount);
+                    map.put("isMsgBlocked",group.isMsgBlocked());
+                    registrar.activity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            result.success(map);
+                        }
+                    });
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
     }
 
     /**
