@@ -1190,17 +1190,28 @@ public class EasemobHandler {
      */
     public static void blockGroupMessage(MethodCall call, MethodChannel.Result result) {
         String groupId = call.argument("groupId");
-        try {
-            EMClient.getInstance().groupManager().blockGroupMessage(groupId);
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
-        registrar.activity().runOnUiThread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                result.success("success");
+                try {
+                    EMClient.getInstance().groupManager().blockGroupMessage(groupId);
+                    registrar.activity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            result.success("success");
+                        }
+                    });
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    registrar.activity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            result.success("error");
+                        }
+                    });
+                }
             }
-        });
+        }).start();
     }
 
     /**
@@ -1208,17 +1219,28 @@ public class EasemobHandler {
      */
     public static void unblockGroupMessage(MethodCall call, MethodChannel.Result result) {
         String groupId = call.argument("groupId");
-        try {
-            EMClient.getInstance().groupManager().unblockGroupMessage(groupId);
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
-        registrar.activity().runOnUiThread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                result.success("success");
+                try {
+                    EMClient.getInstance().groupManager().unblockGroupMessage(groupId);
+                    registrar.activity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            result.success("success");
+                        }
+                    });
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    registrar.activity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            result.success("error");
+                        }
+                    });
+                }
             }
-        });
+        }).start();
     }
 
     /**
@@ -1281,17 +1303,29 @@ public class EasemobHandler {
     public static void changeGroupName(MethodCall call, MethodChannel.Result result) {
         String groupId = call.argument("groupId");
         String changedGroupName = call.argument("changedGroupName");
-        try {
-            EMClient.getInstance().groupManager().changeGroupName(groupId, changedGroupName);
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
-        registrar.activity().runOnUiThread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                result.success("success");
+                try {
+                    EMClient.getInstance().groupManager().changeGroupName(groupId, changedGroupName);
+                    registrar.activity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            result.success("success");
+                        }
+                    });
+
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    registrar.activity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            result.success("error");
+                        }
+                    });
+                }
             }
-        });
+        }).start();
     }
 
     /**
