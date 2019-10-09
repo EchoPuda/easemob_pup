@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:easemob_plu/easemob_plu.dart' as easemob;
 
@@ -24,20 +25,40 @@ class CallingPageState extends State<CallingPage> {
   Timer timer;
   bool isActive = false;
   int secondsPassed = 0;
-  String statusText;
+  String statusText = "";
   bool isCalling = false;
   bool _mic = false;
   bool _voiceOpen = false;
   int timeLead = 0;
 
+  bool isRingEnd = false;
+
+  /// 状态码
+  int state = 100;
+
+  AssetsAudioPlayer assetsAudioPlayer = new AssetsAudioPlayer();
+
   @override
   void initState() {
     super.initState();
-    statusText = widget.callIn ? "邀请你进行语音通话" : "正在等待对方接收邀请";
     _addCallStateListener();
+    assetsAudioPlayer.open(AssetsAudio(
+      asset: "ring.mp3",
+      folder: "asset/audio/",
+    ));
+    assetsAudioPlayer.finished.listen((finished){
+      if (finished && !isRingEnd) {
+        assetsAudioPlayer.play();
+      }
+    });
     easemob.responseFromCallStateChange.listen((result){
       switch(result) {
         case 0: {
+          _closeSpeaker();
+          if (assetsAudioPlayer.isPlaying.value){
+            assetsAudioPlayer.stop();
+          }
+          isRingEnd = true;
           setState(() {
             statusText = "";
             _timeValue = "00:00";
@@ -65,15 +86,34 @@ class CallingPageState extends State<CallingPage> {
           });
           break;
         }
-        case -1: {
+        case 4: {
+          if (widget.callIn && !isCalling) {
+            _openSpeaker();
+            print("开始——————————————————————————————————————————————————————————————————————————————————");
+            assetsAudioPlayer.play();
+          }
           setState(() {
-            statusText = "通话已结束";
-            isActive = false;
-            timer.cancel();
-            new Timer(Duration(milliseconds: 300), (){
-              Navigator.of(context).pop();
-            });
+            statusText = widget.callIn ? "邀请你进行语音通话" : "正在等待对方接收邀请";
           });
+          break;
+        }
+        case -1: {
+          if (assetsAudioPlayer.isPlaying.value){
+            assetsAudioPlayer.stop();
+          }
+          isRingEnd = true;
+          if (state != -1) {
+            assetsAudioPlayer.stop();
+            setState(() {
+              statusText = "通话已结束";
+              isActive = false;
+              timer.cancel();
+              new Timer(Duration(milliseconds: 300), (){
+                Navigator.of(context).pop();
+              });
+            });
+            state = -1;
+          }
           break;
         }
         case -2: {
@@ -166,6 +206,7 @@ class CallingPageState extends State<CallingPage> {
   void dispose() async {
     super.dispose();
     await easemob.removeCallStateChangeListener();
+    assetsAudioPlayer.dispose();
   }
 
   @override

@@ -700,6 +700,8 @@ Stream<String> get responseFromCallReceiver => _onCallReceiverController.stream;
 /// 1 正在连接对方
 /// 2 双方已经建立连接
 /// 3 网络恢复正常
+/// 4 ringing
+/// 5 接听中
 /// -1 电话断了   只有断了之后才能关闭通话界面（保证通话所占用的资源都释放完）
 /// -2 网络不稳定
 /// -----以下是error状态

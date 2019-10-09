@@ -200,6 +200,9 @@ public class EasemobHandler {
         });
     }
 
+    /**
+     * 电话接收注册
+     */
     public static void addCallReceiverChangeListener(MethodCall call, MethodChannel.Result result) {
         IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
         if(callReceiver == null){

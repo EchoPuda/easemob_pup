@@ -18,6 +18,9 @@ dependencies:
   # 图片选择
   image_picker: ^0.6.1+4
 
+  # assets 音频播放器
+  assets_audio_player: ^1.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -38,6 +41,7 @@ flutter:
 
   assets:
     - asset/image/
+    - asset/audio/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
