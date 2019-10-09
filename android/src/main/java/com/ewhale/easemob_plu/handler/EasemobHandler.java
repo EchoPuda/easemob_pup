@@ -1381,7 +1381,7 @@ public class EasemobHandler {
                     e.printStackTrace();
                 }
             }
-        });
+        }).start();
 
 
     }
