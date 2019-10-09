@@ -6,9 +6,9 @@ class EMGroup {
   final String groupOwner;
   final String groupName;
   final String groupDescription;
-  final List<String> adminList;
+  final List<dynamic> adminList;
   final int groupCount;
-  final List<String> members;
+  final List<dynamic> members;
   final int groupMaxCount;
   final bool isMsgBlocked;
 
