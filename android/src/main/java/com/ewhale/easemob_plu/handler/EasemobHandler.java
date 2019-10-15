@@ -550,6 +550,7 @@ public class EasemobHandler {
                     case VOICE:
                         map.put("type","VOICE");
                         EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                        map.put("soundLength",voiceBody.getLength());
                         map.put("body",voiceBody.getRemoteUrl());
                         break;
                     case CMD:
@@ -622,6 +623,7 @@ public class EasemobHandler {
                 case VOICE:
                     map.put("type","VOICE");
                     EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                    map.put("soundLength",voiceBody.getLength());
                     map.put("body",voiceBody.getRemoteUrl());
                     break;
                 case CMD:
@@ -689,6 +691,7 @@ public class EasemobHandler {
                 case VOICE:
                     map.put("type","VOICE");
                     EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                    map.put("soundLength",voiceBody.getLength());
                     map.put("body",voiceBody.getRemoteUrl());
                     break;
                 case CMD:
@@ -767,6 +770,7 @@ public class EasemobHandler {
                 case VOICE:
                     map.put("type","VOICE");
                     EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                    map.put("soundLength",voiceBody.getLength());
                     map.put("body",voiceBody.getRemoteUrl());
                     break;
                 case CMD:
@@ -917,6 +921,7 @@ public class EasemobHandler {
                 case VOICE:
                     map.put("type","VOICE");
                     EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) emMessage.getBody();
+                    map.put("soundLength",voiceBody.getLength());
                     map.put("body",voiceBody.getRemoteUrl());
                     break;
                 case CMD:

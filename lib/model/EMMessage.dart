@@ -8,6 +8,8 @@ class EMMessage {
   final String body;
   /// 类型为图片时原图地址
   final String image;
+  /// 类型为语音时的语音时长（秒）
+  final String soundLength;
   final String msgId;
   final String fromUser;
   final String toUser;
@@ -18,6 +20,7 @@ class EMMessage {
         type = getType(map["type"]),
         body = map["body"],
         image = map["image"],
+        soundLength = map["soundLength"],
         msgId = map["msgId"],
         fromUser = map["fromUser"],
         time = map["time"],
