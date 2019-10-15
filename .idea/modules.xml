@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/easemob_plu.iml" filepath="$PROJECT_DIR$/easemob_plu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/easemob_plu_android.iml" filepath="$PROJECT_DIR$/android/easemob_plu_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/android/easemob_plu_example_android.iml" filepath="$PROJECT_DIR$/example/android/easemob_plu_example_android.iml" />
+    </modules>
+  </component>
+</project>

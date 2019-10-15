@@ -9,7 +9,7 @@ class EMMessage {
   /// 类型为图片时原图地址
   final String image;
   /// 类型为语音时的语音时长（秒）
-  final String soundLength;
+  final int soundLength;
   final String msgId;
   final String fromUser;
   final String toUser;
