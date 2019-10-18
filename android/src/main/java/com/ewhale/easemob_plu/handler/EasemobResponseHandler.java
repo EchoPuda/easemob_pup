@@ -93,6 +93,7 @@ public class EasemobResponseHandler {
                 case VOICE:
                     map.put("type","VOICE");
                     EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                    map.put("soundLength",voiceBody.getLength());
                     map.put("body",voiceBody.getLocalUrl());
                     break;
                 case CMD:
@@ -116,8 +117,8 @@ public class EasemobResponseHandler {
             map.put("fromUser",fromUser);
             String toUser = messages.get(i).getTo();
             map.put("toUser",toUser);
-            msgList.add(map);
             map.put("time",messages.get(i).getMsgTime());
+            msgList.add(map);
             channel.invokeMethod("emMsgListener", msgList);
         }
 
