@@ -193,29 +193,33 @@ public class ConferenceHandler {
      */
     public static void getConferenceMsg(MethodCall call, MethodChannel.Result result) {
         Map<String, Object> map = new HashMap<>();
+        ArrayList<String> list = new ArrayList<String>();
         if (conference == null || conference.getConferenceId() == null) {
             map.put("confId","");
             map.put("password","");
             map.put("extension","");
+            map.put("conferenceType","");
+            map.put("memberNum",conference.getMemberNum());
+            map.put("speakers",list);
         } else  {
             map.put("confId",conference.getConferenceId());
             map.put("password",conference.getPassword());
             map.put("extension",conference.getExtension());
+            if (conference.getConferenceType() == EMConferenceManager.EMConferenceType.LargeCommunication) {
+                map.put("conferenceType","largeCommunication");
+            } else if (conference.getConferenceType() == EMConferenceManager.EMConferenceType.SmallCommunication) {
+                map.put("conferenceType","smallCommunication");
+            } else {
+                map.put("conferenceType","LiveStream");
+            }
+            map.put("memberNum",conference.getMemberNum());
+
+            if (conference.getSpeakers() != null) {
+                list.addAll(Arrays.asList(conference.getSpeakers()));
+            }
+            map.put("speakers",list);
         }
 
-        if (conference.getConferenceType() == EMConferenceManager.EMConferenceType.LargeCommunication) {
-            map.put("conferenceType","largeCommunication");
-        } else if (conference.getConferenceType() == EMConferenceManager.EMConferenceType.SmallCommunication) {
-            map.put("conferenceType","smallCommunication");
-        } else {
-            map.put("conferenceType","LiveStream");
-        }
-        map.put("memberNum",conference.getMemberNum());
-        ArrayList<String> list = new ArrayList<String>();
-        if (conference.getSpeakers() != null) {
-            list.addAll(Arrays.asList(conference.getSpeakers()));
-        }
-        map.put("speakers",list);
         result.success(map);
     }
 

@@ -288,13 +288,6 @@
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
     </task>
-    <task id="LOCAL-00007" summary="AndroidX">
-      <created>1568004345459</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1568004345459</updated>
-    </task>
     <task id="LOCAL-00008" summary="群聊，聊天室功能">
       <created>1568107096639</created>
       <option name="number" value="00008" />
@@ -631,7 +624,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572507593454</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="获取群语音详情处理">
+      <created>1572510967936</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1572510967937</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TodoView">
@@ -644,8 +644,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3" y="0" width="1422" height="1047" extended-state="0" />
-    <editor active="true" />
+    <frame x="-3" y="0" width="1422" height="1047" extended-state="1" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22540382" />
       <window_info id="Captures" order="1" side_tool="true" />
@@ -718,7 +717,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="语音通话demo修改" />
     <MESSAGE value="增加获取未读消息总数功能" />
     <MESSAGE value="登录回调异常。强行加载" />
     <MESSAGE value="增加退出回调判断" />
@@ -743,7 +741,8 @@
     <MESSAGE value="消息接收调整" />
     <MESSAGE value="增加群语音" />
     <MESSAGE value="增加群语音回调" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加群语音回调" />
+    <MESSAGE value="获取群语音详情处理" />
+    <option name="LAST_COMMIT_MESSAGE" value="获取群语音详情处理" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/lib/model/UserRequestGroup.dart">
