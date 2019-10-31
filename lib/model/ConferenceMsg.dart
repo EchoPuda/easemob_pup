@@ -7,7 +7,7 @@ class ConferenceMsg {
   String extension;
   String conferenceType;
   int memberNum;
-  List<dynamic> speakers;
+  List<String> speakers;
 
   ConferenceMsg.fromMap(Map map)
       : confId = map["confId"],
@@ -15,6 +15,6 @@ class ConferenceMsg {
         extension = map["extension"],
         conferenceType = map["conferenceType"],
         memberNum = map["memberNum"],
-        speakers = map["speakers"];
+        speakers = new List<String>.from(map["speakers"]);
 
 }
