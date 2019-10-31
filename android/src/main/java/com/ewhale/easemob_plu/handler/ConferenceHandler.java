@@ -126,6 +126,7 @@ public class ConferenceHandler {
      */
     public static void exitConference(MethodCall call, MethodChannel.Result result) {
         stopAudioTalkingMonitor();
+        conference = null;
 
         EMClient.getInstance().conferenceManager().exitConference(new EMValueCallBack() {
             @Override
@@ -192,9 +193,16 @@ public class ConferenceHandler {
      */
     public static void getConferenceMsg(MethodCall call, MethodChannel.Result result) {
         Map<String, Object> map = new HashMap<>();
-        map.put("confId",conference.getConferenceId());
-        map.put("password",conference.getPassword());
-        map.put("extension",conference.getExtension());
+        if (conference == null || conference.getConferenceId() == null) {
+            map.put("confId","");
+            map.put("password","");
+            map.put("extension","");
+        } else  {
+            map.put("confId",conference.getConferenceId());
+            map.put("password",conference.getPassword());
+            map.put("extension",conference.getExtension());
+        }
+
         if (conference.getConferenceType() == EMConferenceManager.EMConferenceType.LargeCommunication) {
             map.put("conferenceType","largeCommunication");
         } else if (conference.getConferenceType() == EMConferenceManager.EMConferenceType.SmallCommunication) {
