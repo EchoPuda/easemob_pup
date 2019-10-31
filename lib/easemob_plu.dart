@@ -16,6 +16,9 @@ import 'package:easemob_plu/model/OwnerChanged.dart';
 import 'package:easemob_plu/model/UserRequestGroup.dart';
 import 'package:flutter/services.dart';
 
+import 'model/ConferenceInviteMsg.dart';
+import 'model/ConferenceMember.dart';
+import 'model/ConferenceMsg.dart';
 import 'model/Contact.dart';
 import 'model/GroupReceived.dart';
 
@@ -629,11 +632,10 @@ Future<String> closeConferenceSpeaker() async {
   return result;
 }
 
-/// 获取群语音消息
-/// 无返回
-Future<String> getConferenceMsg() async {
+/// 获取群语音详情
+Future<ConferenceMsg> getConferenceMsg() async {
   var result = await _channel.invokeMethod("getConferenceMsg",{});
-  return result;
+  return ConferenceMsg.fromMap(result);
 }
 
 /// 添加会议监听
@@ -780,6 +782,32 @@ StreamController<int> _onCallStateChangeController = new StreamController.broadc
 
 Stream<int> get responseFromCallStateChange => _onCallStateChangeController.stream;
 
+///----------------------------------群语音
+/// 成员加入监听
+StreamController<ConferenceMember> _onConferenceMemberJoinedController = new StreamController.broadcast();
+
+Stream<ConferenceMember> get responseFromConferenceMemberJoined => _onConferenceMemberJoinedController.stream;
+
+/// 成员退出监听
+StreamController<ConferenceMember> _onConferenceMemberExitedController = new StreamController.broadcast();
+
+Stream<ConferenceMember> get responseFromConferenceMemberMemberExited => _onConferenceMemberExitedController.stream;
+
+/// 会议状态监听
+StreamController<String> _onConferenceStateController = new StreamController.broadcast();
+
+Stream<String> get responseFromConferenceState => _onConferenceStateController.stream;
+
+/// 当前说话者监听
+StreamController<List<String>> _onConferenceSpeakersChangeController = new StreamController.broadcast();
+
+Stream<List<String>> get responseFromConferenceSpeakersChange => _onConferenceSpeakersChangeController.stream;
+
+/// 监听群语音邀请
+StreamController<ConferenceInviteMsg> _onConferenceReceiveInviteController = new StreamController.broadcast();
+
+Stream<ConferenceInviteMsg> get responseFromConferenceReceiveInvite => _onConferenceReceiveInviteController.stream;
+
 ///事件处理
 Future<dynamic> _handler(MethodCall methodCall) {
   if ("emDisConnectListener" == methodCall.method) {
@@ -833,6 +861,16 @@ Future<dynamic> _handler(MethodCall methodCall) {
     _onCallReceiverController.add(methodCall.arguments);
   } else if ("onCallStateChange" == methodCall.method) {
     _onCallStateChangeController.add(methodCall.arguments);
+  } else if ("onMemberJoined" == methodCall.method) {
+    _onConferenceMemberJoinedController.add(ConferenceMember.formMap(methodCall.arguments));
+  } else if ("onMemberExited" == methodCall.method) {
+    _onConferenceMemberExitedController.add(ConferenceMember.formMap(methodCall.arguments));
+  } else if ("onConferenceState" == methodCall.method) {
+    _onConferenceStateController.add(methodCall.arguments);
+  } else if ("onSpeakersChange" == methodCall.method) {
+    _onConferenceSpeakersChangeController.add(methodCall.arguments);
+  } else if ("onReceiveConferenceInvite" == methodCall.method) {
+    _onConferenceReceiveInviteController.add(ConferenceInviteMsg.formMap(methodCall.arguments));
   }
   return Future.value(true);
 }

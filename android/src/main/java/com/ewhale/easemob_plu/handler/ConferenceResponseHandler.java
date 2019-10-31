@@ -92,7 +92,7 @@ public class ConferenceResponseHandler {
                 confState = "error";
                 break;
         }
-        channel.invokeMethod("onMemberExited", confState);
+        channel.invokeMethod("onConferenceState", confState);
     }
 
     /**
@@ -100,7 +100,7 @@ public class ConferenceResponseHandler {
      */
     public static void onSpeakers(List<String> speakers){
         ArrayList<String> list = new ArrayList<>(speakers);
-        channel.invokeMethod("onMemberExited", list);
+        channel.invokeMethod("onSpeakersChange", list);
     }
 
     /**
@@ -111,7 +111,7 @@ public class ConferenceResponseHandler {
         map.put("confId",confId);
         map.put("password",password);
         map.put("extension",extension);
-        channel.invokeMethod("onMemberExited", map);
+        channel.invokeMethod("onReceiveConferenceInvite", map);
     }
 
 }
