@@ -15,6 +15,14 @@ class ConferenceMsg {
         extension = map["extension"],
         conferenceType = map["conferenceType"],
         memberNum = map["memberNum"],
-        speakers = List<String>.from(map["speakers"]);
+        speakers = _getSpeakers(map["speakers"]);
 
+}
+
+List<String> _getSpeakers(List list) {
+  List<String> listS = new List();
+  list.forEach((e){
+    listS.add(e);
+  });
+  return listS;
 }
