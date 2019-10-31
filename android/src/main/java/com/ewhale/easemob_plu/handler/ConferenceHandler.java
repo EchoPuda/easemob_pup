@@ -193,7 +193,7 @@ public class ConferenceHandler {
      */
     public static void getConferenceMsg(MethodCall call, MethodChannel.Result result) {
         Map<String, Object> map = new HashMap<>();
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<Object> list = new ArrayList<>();
         if (conference == null || conference.getConferenceId() == null) {
             map.put("confId","");
             map.put("password","");
