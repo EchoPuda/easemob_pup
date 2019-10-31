@@ -7,7 +7,7 @@ class ConferenceMsg {
   String extension;
   String conferenceType;
   int memberNum;
-  List<String> speakers;
+  List speakers;
 
   ConferenceMsg.fromMap(Map map)
       : confId = map["confId"],
