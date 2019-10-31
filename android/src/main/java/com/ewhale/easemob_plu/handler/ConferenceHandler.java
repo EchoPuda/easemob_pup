@@ -199,7 +199,7 @@ public class ConferenceHandler {
             map.put("password","");
             map.put("extension","");
             map.put("conferenceType","");
-            map.put("memberNum",conference.getMemberNum());
+            map.put("memberNum",0);
             map.put("speakers",list);
         } else  {
             map.put("confId",conference.getConferenceId());

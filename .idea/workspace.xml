@@ -9,7 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/ConferenceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/ConferenceHandler.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -53,8 +52,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/model/ConferenceInviteMsg.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="12" column="1" lean-forward="true" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+            <state relative-caret-position="200">
+              <caret line="10" column="35" lean-forward="true" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -287,13 +286,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00008" summary="群聊，聊天室功能">
-      <created>1568107096639</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1568107096639</updated>
     </task>
     <task id="LOCAL-00009" summary="bug修改">
       <created>1568112959358</created>
@@ -631,7 +623,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572510967937</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="获取群语音详情处理">
+      <created>1572511345886</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1572511345886</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TodoView">
@@ -645,6 +644,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1422" height="1047" extended-state="1" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22540382" />
       <window_info id="Captures" order="1" side_tool="true" />
@@ -1068,8 +1068,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/model/ConferenceInviteMsg.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="12" column="1" lean-forward="true" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
+        <state relative-caret-position="200">
+          <caret line="10" column="35" lean-forward="true" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
         </state>
       </provider>
     </entry>
