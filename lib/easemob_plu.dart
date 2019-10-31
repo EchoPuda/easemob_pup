@@ -576,6 +576,72 @@ Future<ChatRoom> getChatRoomDetail(String roomId) async {
   return ChatRoom.fromMap(result);
 }
 
+/// 作为创建者创建并加入会议
+/// 返回 conferenceId:password:extension
+Future<String> createAndJoinConference({String password : ""}) async {
+  var result = await _channel.invokeMethod("createAndJoinConference",{
+    "password" : password,
+  });
+  return result;
+}
+
+/// 作为成员直接根据 confId 和 password 加入会议
+Future<String> joinConference(String confId,{String password : ""}) async {
+  var result = await _channel.invokeMethod("joinConference",{
+    "confId" : confId,
+    "password" : password,
+  });
+  return result;
+}
+
+/// 退出会议
+/// 无返回
+Future<String> exitConference() async {
+  var result = await _channel.invokeMethod("exitConference",{});
+  return result;
+}
+
+/// 打开语音（群）
+/// 无返回
+Future<String> openVoiceTransfer() async {
+  var result = await _channel.invokeMethod("openVoiceTransfer",{});
+  return result;
+}
+
+/// 关闭语音（群）
+/// 无返回
+Future<String> closeVoiceTransfer() async {
+  var result = await _channel.invokeMethod("closeVoiceTransfer",{});
+  return result;
+}
+
+/// 打开扬声器（群）
+/// 无返回
+Future<String> openConferenceSpeaker() async {
+  var result = await _channel.invokeMethod("openConferenceSpeaker",{});
+  return result;
+}
+
+/// 打开扬声器（群）
+/// 无返回
+Future<String> closeConferenceSpeaker() async {
+  var result = await _channel.invokeMethod("closeConferenceSpeaker",{});
+  return result;
+}
+
+/// 获取群语音消息
+/// 无返回
+Future<String> getConferenceMsg() async {
+  var result = await _channel.invokeMethod("getConferenceMsg",{});
+  return result;
+}
+
+/// 添加会议监听
+/// 无返回
+Future<String> addConferenceListener() async {
+  var result = await _channel.invokeMethod("addConferenceListener",{});
+  return result;
+}
 
 /// 连接失败状态回调
 /// 登录成功自动注册了监听

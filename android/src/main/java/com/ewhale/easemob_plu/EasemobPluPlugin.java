@@ -1,5 +1,7 @@
 package com.ewhale.easemob_plu;
 
+import com.ewhale.easemob_plu.handler.ConferenceHandler;
+import com.ewhale.easemob_plu.handler.ConferenceResponseHandler;
 import com.ewhale.easemob_plu.handler.EasemobHandler;
 import com.ewhale.easemob_plu.handler.EasemobRequestHandler;
 import com.ewhale.easemob_plu.handler.EasemobResponseHandler;
@@ -28,8 +30,10 @@ public class EasemobPluPlugin implements MethodCallHandler {
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), "easemob_plu");
     EasemobHandler.setRegistrar(registrar);
+    ConferenceHandler.setRegistrar(registrar);
     EasemobRequestHandler.setRegistrar(registrar);
     EasemobResponseHandler.setMethodChannel(channel);
+    ConferenceResponseHandler.setMethodChannel(channel);
     channel.setMethodCallHandler(new EasemobPluPlugin(registrar, channel));
   }
 
@@ -149,6 +153,24 @@ public class EasemobPluPlugin implements MethodCallHandler {
         EasemobHandler.blockGroupMessage(call,result);
     } else if (call.method.equals("unblockGroupMessage")) {
         EasemobHandler.unblockGroupMessage(call,result);
+    } else if (call.method.equals("createAndJoinConference")) {
+        ConferenceHandler.createAndJoinConference(call,result);
+    } else if (call.method.equals("joinConference")) {
+        ConferenceHandler.joinConference(call,result);
+    } else if (call.method.equals("exitConference")) {
+        ConferenceHandler.exitConference(call,result);
+    } else if (call.method.equals("openVoiceTransfer")) {
+        ConferenceHandler.openVoiceTransfer(call,result);
+    } else if (call.method.equals("closeVoiceTransfer")) {
+        ConferenceHandler.closeVoiceTransfer(call,result);
+    } else if (call.method.equals("openConferenceSpeaker")) {
+        ConferenceHandler.openSpeaker(call,result);
+    } else if (call.method.equals("closeConferenceSpeaker")) {
+        ConferenceHandler.closeSpeaker(call,result);
+    } else if (call.method.equals("getConferenceMsg")) {
+        ConferenceHandler.getConferenceMsg(call,result);
+    } else if (call.method.equals("addConferenceListener")) {
+        ConferenceHandler.addConferenceListener(call,result);
     } else {
       result.notImplemented();
     }
