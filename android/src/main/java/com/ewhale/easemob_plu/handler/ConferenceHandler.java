@@ -195,6 +195,7 @@ public class ConferenceHandler {
         Map<String, Object> map = new HashMap<>();
         ArrayList<String> list = new ArrayList<>();
         if (conference == null || conference.getConferenceId() == null) {
+            list.add("");
             map.put("confId","");
             map.put("password","");
             map.put("extension","");
