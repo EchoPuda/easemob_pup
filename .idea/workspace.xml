@@ -7,7 +7,11 @@
     <bookmark url="file://$PROJECT_DIR$/../../rhinoProject/9-10/rhino/lib/page/chatroom/ChatRoomPage.dart" description="     }&#10;     // 0 红包总金额  1 红包个数  2 备注&#10;     List res..." line="581" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="" />
+    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/ConferenceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/ConferenceHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/model/ConferenceMsg.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/ConferenceMsg.dart" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -59,8 +63,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/model/ConferenceMsg.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="6" column="19" lean-forward="true" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
+            <state relative-caret-position="340">
+              <caret line="17" column="52" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -179,7 +183,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="917" />
+    <option name="x" value="107" />
+    <option name="y" value="3" />
     <option name="width" value="965" />
     <option name="height" value="1047" />
   </component>
@@ -284,13 +289,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00013" summary="添加IOS插件内容，登录注册获取消息等">
-      <created>1568696046067</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1568696046067</updated>
     </task>
     <task id="LOCAL-00014" summary="0">
       <created>1568699204021</created>
@@ -628,7 +626,14 @@
       <option name="project" value="LOCAL" />
       <updated>1572513450475</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="获取群语音详情处理">
+      <created>1572513897925</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1572513897925</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TodoView">
@@ -641,7 +646,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="917" y="0" width="965" height="1047" extended-state="0" />
+    <frame x="107" y="3" width="965" height="1047" extended-state="0" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3392265" />
       <window_info id="Captures" order="1" side_tool="true" />
@@ -1065,8 +1070,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/model/ConferenceMsg.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="6" column="19" lean-forward="true" selection-start-line="6" selection-start-column="19" selection-end-line="6" selection-end-column="19" />
+        <state relative-caret-position="340">
+          <caret line="17" column="52" selection-start-line="17" selection-start-column="52" selection-end-line="17" selection-end-column="52" />
         </state>
       </provider>
     </entry>
