@@ -171,6 +171,8 @@ public class EasemobPluPlugin implements MethodCallHandler {
         ConferenceHandler.getConferenceMsg(call,result);
     } else if (call.method.equals("addConferenceListener")) {
         ConferenceHandler.addConferenceListener(call,result);
+    } else if (call.method.equals("sendImageMessageBackUrl")) {
+        EasemobHandler.sendImageMessageBackUrl(call,result);
     } else {
       result.notImplemented();
     }

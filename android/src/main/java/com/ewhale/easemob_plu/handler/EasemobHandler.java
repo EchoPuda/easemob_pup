@@ -399,7 +399,71 @@ public class EasemobHandler {
         }
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
+        EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
         result.success(message.getMsgId());
+        message.setMessageStatusCallback(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("success");
+                    }
+                });
+
+            }
+
+            @Override
+            public void onError(int code, String error) {
+
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("error");
+                    }
+                });
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
+    }
+
+    /**
+     * 发送图片消息
+     */
+    public static void sendImageMessageBackUrl(MethodCall call, MethodChannel.Result result) {
+        //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
+        String imagePath = call.argument("imagePath");
+        assert imagePath != null;
+        boolean originally;
+        if (call.argument("originally") != null) {
+            originally = (boolean)call.argument("originally");
+        } else {
+            originally = false;
+        }
+
+        EMMessage message = EMMessage.createImageSendMessage(imagePath, originally, call.argument("toChatUsername"));
+        //如果是群聊1或聊天室2，设置chattype，默认是单聊0
+        int chatType = (int)call.argument("chatType");
+        if (chatType == 1){
+            message.setChatType(EMMessage.ChatType.GroupChat);
+        } else if (chatType == 2) {
+            message.setChatType(EMMessage.ChatType.ChatRoom);
+        }
+        //发送消息
+        EMClient.getInstance().chatManager().sendMessage(message);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("messageId", message.getMsgId());
+        EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
+        map.put("image", imgBody.getRemoteUrl());
+        String body = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+        map.put("body", body);
+        result.success(map);
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
