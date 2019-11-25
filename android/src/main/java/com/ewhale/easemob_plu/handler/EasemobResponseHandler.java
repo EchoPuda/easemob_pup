@@ -86,12 +86,12 @@ public class EasemobResponseHandler {
                             }
                         }
                     }
-                    System.out.println("thumbnail:-----------------" + imgBody.getThumbnailUrl());
-                    System.out.println("local:---------------" + imgBody.getLocalUrl());
-                    System.out.println("remote:-------------" + imgBody.getRemoteUrl());
+                    // "thumbnail:-----------------" + imgBody.getThumbnailUrl() 缩略图路径
+                    // "local:---------------" + imgBody.getLocalUrl() 本地路径，建议自己下载使用
+                    // "remote:-------------" + imgBody.getRemoteUrl() 假如传原图就原图路径
                     String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
                     map.put("body",thumbPath);
-                    map.put("image",imagePath);
+                    map.put("image",imgBody.getRemoteUrl());
                     break;
                 case VOICE:
                     map.put("type","VOICE");

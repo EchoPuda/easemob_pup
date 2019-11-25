@@ -545,7 +545,7 @@ public class EasemobHandler {
                         String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
                         System.out.println(thumbPath);
                         map.put("body",thumbPath);
-                        map.put("image",imagePath);
+                        map.put("image",imgBody.getRemoteUrl());
                         break;
                     case VOICE:
                         map.put("type","VOICE");
@@ -618,7 +618,7 @@ public class EasemobHandler {
                     String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
                     System.out.println(thumbPath);
                     map.put("body",thumbPath);
-                    map.put("image",imagePath);
+                    map.put("image",imgBody.getRemoteUrl());
                     break;
                 case VOICE:
                     map.put("type","VOICE");
@@ -686,7 +686,7 @@ public class EasemobHandler {
                     String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
                     System.out.println(thumbPath);
                     map.put("body",thumbPath);
-                    map.put("image",imagePath);
+                    map.put("image",imgBody.getRemoteUrl());
                     break;
                 case VOICE:
                     map.put("type","VOICE");
@@ -765,7 +765,7 @@ public class EasemobHandler {
                     }
                     String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
                     map.put("body",thumbPath);
-                    map.put("image",imagePath);
+                    map.put("image",imgBody.getRemoteUrl());
                     break;
                 case VOICE:
                     map.put("type","VOICE");
@@ -916,7 +916,7 @@ public class EasemobHandler {
                     }
                     String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
                     map.put("body",thumbPath);
-                    map.put("image",imagePath);
+                    map.put("image",imgBody.getRemoteUrl());
                     break;
                 case VOICE:
                     map.put("type","VOICE");
