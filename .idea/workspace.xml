@@ -8,6 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
@@ -196,13 +197,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00022" summary="增加删除单条消息">
-      <created>1569376667389</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1569376667389</updated>
     </task>
     <task id="LOCAL-00023" summary="00">
       <created>1569378108890</created>
@@ -540,7 +534,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574654319855</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="图片发送方式调整">
+      <created>1574662010499</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1574662010499</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TodoView">
