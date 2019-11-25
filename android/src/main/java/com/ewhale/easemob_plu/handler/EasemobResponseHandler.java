@@ -89,6 +89,7 @@ public class EasemobResponseHandler {
                     // "thumbnail:-----------------" + imgBody.getThumbnailUrl() 缩略图路径
                     // "local:---------------" + imgBody.getLocalUrl() 本地路径，建议自己下载使用
                     // "remote:-------------" + imgBody.getRemoteUrl() 假如传原图就原图路径
+                    System.out.println("remote:-------------" + imgBody.getRemoteUrl());
                     String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
                     map.put("body",thumbPath);
                     map.put("image",imgBody.getRemoteUrl());
