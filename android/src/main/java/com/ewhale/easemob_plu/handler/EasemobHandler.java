@@ -397,10 +397,6 @@ public class EasemobHandler {
         } else if (chatType == 2) {
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
-        //发送消息
-        EMClient.getInstance().chatManager().sendMessage(message);
-        EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
-        result.success(message.getMsgId());
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -428,9 +424,18 @@ public class EasemobHandler {
 
             @Override
             public void onProgress(int progress, String status) {
-
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("sending");
+                    }
+                });
             }
         });
+        //发送消息
+        EMClient.getInstance().chatManager().sendMessage(message);
+        result.success(message.getMsgId());
+
     }
 
     /**
@@ -455,15 +460,6 @@ public class EasemobHandler {
         } else if (chatType == 2) {
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
-        //发送消息
-        EMClient.getInstance().chatManager().sendMessage(message);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("messageId", message.getMsgId());
-        EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
-        map.put("image", imgBody.getRemoteUrl());
-        String body = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
-        map.put("body", body);
-        result.success(map);
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -491,9 +487,24 @@ public class EasemobHandler {
 
             @Override
             public void onProgress(int progress, String status) {
-
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("sending");
+                    }
+                });
             }
         });
+        //发送消息
+        EMClient.getInstance().chatManager().sendMessage(message);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("messageId", message.getMsgId());
+        EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
+        map.put("image", imgBody.getRemoteUrl());
+        String body = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+        map.put("body", body);
+        result.success(map);
+
     }
 
     /**
