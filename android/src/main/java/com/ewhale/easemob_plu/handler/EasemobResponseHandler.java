@@ -86,9 +86,9 @@ public class EasemobResponseHandler {
                             }
                         }
                     }
-                    System.out.println("thumbnail:" + imgBody.getThumbnailUrl());
-                    System.out.println("local:" + imgBody.getLocalUrl());
-                    System.out.println("remote:" + imgBody.getRemoteUrl());
+                    System.out.println("thumbnail:-----------------" + imgBody.getThumbnailUrl());
+                    System.out.println("local:---------------" + imgBody.getLocalUrl());
+                    System.out.println("remote:-------------" + imgBody.getRemoteUrl());
                     String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
                     map.put("body",thumbPath);
                     map.put("image",imagePath);
