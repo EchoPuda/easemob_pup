@@ -97,6 +97,29 @@ Future sendTextMessage(
   return result;
 }
 
+/// 发送文本消息
+Future sendTextMessageForMsgId(
+    //对方用户或群聊的id
+    String toChatUsername,
+    //内容
+    String content,
+    //是否是群聊，默认是单聊0，群聊为1，聊天室为2
+    {
+      int chatType : 0,
+      String extraName : "",
+      String extra : "",
+    }
+    ) async {
+  String result = await _channel.invokeMethod("sendTextMessageForMsgId",{
+    "content" : content,
+    "toChatUsername" : toChatUsername,
+    "chatType" : chatType,
+    "extraName" : extraName,
+    "extra" : extra,
+  });
+  return result;
+}
+
 /// 发送语音消息
 Future sendVoiceMessage(
     String toChatUsername,

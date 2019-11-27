@@ -44,6 +44,8 @@ import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.NetUtils;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -351,6 +353,12 @@ public class EasemobHandler {
         } else if (chatType == 2) {
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
+        String extra = call.argument("extra");
+        String extraName = call.argument("extraName");
+        if (!"".equals(extraName)) {
+            message.setAttribute(extraName, extra);
+        }
+
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
 
