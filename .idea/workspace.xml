@@ -9,9 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/EasemobPluPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/EasemobPluPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/easemob_plu.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/easemob_plu.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -35,7 +32,7 @@
         <entry file="file://$PROJECT_DIR$/lib/easemob_plu.dart">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="107">
-              <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
+              <caret line="137" selection-start-line="137" selection-end-line="137" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -199,13 +196,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00024" summary="删除接口增加聊天类型选择">
-      <created>1569381927023</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1569381927023</updated>
     </task>
     <task id="LOCAL-00025" summary="发送消息返回修改">
       <created>1569382611612</created>
@@ -543,7 +533,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574662375555</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="添加获取连接状态方法">
+      <created>1574838341581</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1574838341582</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TodoView">
@@ -556,7 +553,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-5" y="3" width="965" height="1047" extended-state="0" />
+    <frame x="-5" y="3" width="965" height="1047" extended-state="1" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.44088396" />
       <window_info id="Captures" order="1" side_tool="true" />
@@ -629,7 +627,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="退出调试" />
     <MESSAGE value="调试" />
     <MESSAGE value="搜索时间类型" />
     <MESSAGE value="群免打扰功能：屏蔽群消息，解除屏蔽消息" />
@@ -654,7 +651,8 @@
     <MESSAGE value="test" />
     <MESSAGE value="图片路径修改" />
     <MESSAGE value="图片发送方式调整" />
-    <option name="LAST_COMMIT_MESSAGE" value="图片发送方式调整" />
+    <MESSAGE value="添加获取连接状态方法" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加获取连接状态方法" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../../../common/flutter/packages/flutter/lib/src/services/message_codecs.dart">
@@ -982,7 +980,7 @@
     <entry file="file://$PROJECT_DIR$/lib/easemob_plu.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="107">
-          <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
+          <caret line="137" selection-start-line="137" selection-end-line="137" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
