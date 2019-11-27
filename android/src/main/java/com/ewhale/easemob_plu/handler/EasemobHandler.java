@@ -337,6 +337,54 @@ public class EasemobHandler {
     }
 
     /**
+     * 发送文本消息(新)
+     */
+    public static void sendTextMessageForMsgId(MethodCall call, MethodChannel.Result result) {
+        //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
+        String text = call.argument("content");
+        assert text != null;
+        EMMessage message = EMMessage.createTxtSendMessage(text, call.argument("toChatUsername"));
+        //如果是群聊1或聊天室2，设置chattype，默认是单聊0
+        int chatType = (int)call.argument("chatType");
+        if (chatType == 1){
+            message.setChatType(EMMessage.ChatType.GroupChat);
+        } else if (chatType == 2) {
+            message.setChatType(EMMessage.ChatType.ChatRoom);
+        }
+        //发送消息
+        EMClient.getInstance().chatManager().sendMessage(message);
+
+        message.setMessageStatusCallback(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("success");
+                        result.success(message.getMsgId());
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EasemobResponseHandler.onMsgSendState("error");
+                        result.success("error");
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
+    }
+
+    /**
      * 发送语音消息
      */
     public static void sendVoiceMessage(MethodCall call, MethodChannel.Result result) {
