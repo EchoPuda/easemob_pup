@@ -250,6 +250,14 @@ public class EasemobHandler {
     /**
      * 退出登录
      */
+    public static void getIsConnect(MethodCall call, MethodChannel.Result result) {
+        boolean isConnect = EMClient.getInstance().isConnected();
+        result.success(isConnect);
+    }
+
+    /**
+     * 退出登录
+     */
     public static void logout(MethodCall call, MethodChannel.Result result) {
 //        unregisterBroadcastReceiver();
         EMClient.getInstance().logout(true, new EMCallBack() {

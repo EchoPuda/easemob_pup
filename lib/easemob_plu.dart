@@ -136,24 +136,9 @@ Future sendImageMessage(
   return result;
 }
 
-/// 发送图片消息(返回Url)
-Future<ImageMsg> sendImageMessageWithUrl(
-    String toChatUsername,
-    //图片本地路径
-    String imagePath,
-    {
-      //false默认不发送原图
-      bool originally : false,
-      //是否是群聊，默认是单聊0，群聊为1，聊天室为2
-      int chatType : 0,}
-    ) async {
-  var result = await _channel.invokeMethod("sendImageMessageBackUrl",{
-    "imagePath" : imagePath,
-    "toChatUsername" : toChatUsername,
-    "originally" : originally,
-    "chatType" : chatType,
-  });
-  return ImageMsg.fromMap(result);
+Future<bool> getIsConnect() async {
+  bool result = await _channel.invokeMethod("getIsConnect",{});
+  return result;
 }
 
 /// 保存图片缩略图
