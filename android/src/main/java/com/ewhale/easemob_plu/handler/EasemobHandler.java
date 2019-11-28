@@ -316,7 +316,7 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        EasemobResponseHandler.onMsgSendState("success");
+                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
                     }
                 });
             }
@@ -417,7 +417,7 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        EasemobResponseHandler.onMsgSendState("success");
+                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
                     }
                 });
             }
@@ -472,7 +472,7 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        EasemobResponseHandler.onMsgSendState("imageSuccess");
+                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
                     }
                 });
 
