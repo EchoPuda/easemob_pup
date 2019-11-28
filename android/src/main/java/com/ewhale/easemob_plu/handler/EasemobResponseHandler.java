@@ -128,6 +128,65 @@ public class EasemobResponseHandler {
 
     }
 
+    public static void onMessageReceivedFor(List<EMMessage> messages){
+        ArrayList<Map<String, Object>> msgList = new ArrayList<>();
+        for (int i = 0; i < messages.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            EMMessage.ChatType chatType = messages.get(i).getChatType();
+            if (chatType == EMMessage.ChatType.Chat) {
+                map.put("chatType",0);
+            } else if (chatType == EMMessage.ChatType.GroupChat) {
+                map.put("chatType",1);
+            } else {
+                map.put("chatType",2);
+            }
+            EMMessage.Type type = messages.get(i).getType();
+            switch (type) {
+                case TXT:
+                    map.put("type","TXT");
+                    EMTextMessageBody textBody = (EMTextMessageBody) messages.get(i).getBody();
+                    map.put("body",textBody.getMessage());
+                    break;
+                case IMAGE:
+                    map.put("type","IMAGE");
+                    EMImageMessageBody imgBody = (EMImageMessageBody) messages.get(i).getBody();
+                    map.put("body",imgBody.getThumbnailUrl());
+                    map.put("image",imgBody.getRemoteUrl());
+                    break;
+                case VOICE:
+                    map.put("type","VOICE");
+                    EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                    map.put("soundLength",voiceBody.getLength());
+                    map.put("body",voiceBody.getRemoteUrl());
+                    break;
+                case CMD:
+                    map.put("type","CMD");
+                    break;
+                case FILE:
+                    map.put("type","FILE");
+                    break;
+                case VIDEO:
+                    map.put("type","VIDEO");
+                    break;
+                case LOCATION:
+                    map.put("type","LOCATION");
+                    break;
+                default:
+                    break;
+            }
+            String msgId = messages.get(i).getMsgId();
+            map.put("msgId",msgId);
+            String fromUser = messages.get(i).getFrom();
+            map.put("fromUser",fromUser);
+            String toUser = messages.get(i).getTo();
+            map.put("toUser",toUser);
+            map.put("time",messages.get(i).getMsgTime());
+            msgList.add(map);
+            channel.invokeMethod("emMsgForListener", msgList);
+        }
+
+    }
+
     public static void onContactListener(String username, int type){
         Map<String, Object> map = new HashMap<>();
         map.put("username", username);

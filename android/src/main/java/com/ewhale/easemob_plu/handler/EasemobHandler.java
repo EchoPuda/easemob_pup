@@ -309,8 +309,6 @@ public class EasemobHandler {
         }
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
-        String msgId = message.getMsgId();
-
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -342,9 +340,10 @@ public class EasemobHandler {
     }
 
     /**
-     * 发送文本消息(新)
+     * 发送文本消息(额外字段）
+     * 暂时支持一个字段String，多个数据可考虑拼接
      */
-    public static void sendTextMessageForMsgId(MethodCall call, MethodChannel.Result result) {
+    public static void sendTextMessageForExtra(MethodCall call, MethodChannel.Result result) {
         //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
         String text = call.argument("content");
         assert text != null;
@@ -396,7 +395,7 @@ public class EasemobHandler {
     }
 
     /**
-     * 发送语音消息
+     * 发送语音消息（旧）
      */
     public static void sendVoiceMessage(MethodCall call, MethodChannel.Result result) {
         //filePath为语音文件路径，length为录音时间(秒)
@@ -420,7 +419,7 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
+                        EasemobResponseHandler.onMsgSendState("success");
                     }
                 });
             }
@@ -443,7 +442,7 @@ public class EasemobHandler {
     }
 
     /**
-     * 发送图片消息
+     * 发送图片消息（旧）
      */
     public static void sendImageMessage(MethodCall call, MethodChannel.Result result) {
         //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
@@ -475,7 +474,7 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
+                        EasemobResponseHandler.onMsgSendState("imageSuccess");
                     }
                 });
 
@@ -507,9 +506,80 @@ public class EasemobHandler {
     }
 
     /**
-     * 发送图片消息
+     * 发送语音消息
      */
-    public static void sendImageMessageBackUrl(MethodCall call, MethodChannel.Result result) {
+    public static void sendVoiceMessageFor(MethodCall call, MethodChannel.Result result) {
+        //filePath为语音文件路径，length为录音时间(秒)
+        String filePath = call.argument("filePath");
+        int length = (int)call.argument("length");
+        assert filePath != null;
+        EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, call.argument("toChatUsername"));
+        //如果是群聊1或聊天室2，设置chattype，默认是单聊0
+        int chatType = (int)call.argument("chatType");
+        if (chatType == 1){
+            message.setChatType(EMMessage.ChatType.GroupChat);
+        } else if (chatType == 2) {
+            message.setChatType(EMMessage.ChatType.ChatRoom);
+        }
+        //发送消息
+        EMClient.getInstance().chatManager().sendMessage(message);
+        message.setMessageStatusCallback(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) message.getBody();
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("msgId",message.getMsgId());
+                        EMMessage.ChatType chatType = message.getChatType();
+                        if (chatType == EMMessage.ChatType.Chat) {
+                            map.put("chatType",0);
+                        } else if (chatType == EMMessage.ChatType.GroupChat) {
+                            map.put("chatType",1);
+                        } else {
+                            map.put("chatType",2);
+                        }
+                        map.put("type","VOICE");
+                        map.put("soundLength",voiceBody.getLength());
+                        map.put("body",voiceBody.getRemoteUrl());
+                        map.put("msgId", message.getMsgId());
+                        String fromUser = message.getFrom();
+                        map.put("fromUser",fromUser);
+                        String toUser = message.getTo();
+                        map.put("toUser",toUser);
+                        map.put("time", message.getMsgTime());
+                        result.success(map);
+                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                registrar.activity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("error","error");
+                        result.success(map);
+                        EasemobResponseHandler.onMsgSendState("error");
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
+    }
+
+    /**
+     * 发送图片消息
+     * 新发送图片返回和接收的均为url
+     */
+    public static void sendImageMessageFor(MethodCall call, MethodChannel.Result result) {
         //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
         String imagePath = call.argument("imagePath");
         assert imagePath != null;
@@ -528,6 +598,9 @@ public class EasemobHandler {
         } else if (chatType == 2) {
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
+
+        //发送消息
+        EMClient.getInstance().chatManager().sendMessage(message);
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -535,7 +608,28 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        EasemobResponseHandler.onMsgSendState("success");
+                        EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("msgId",message.getMsgId());
+                        EMMessage.ChatType chatType = message.getChatType();
+                        if (chatType == EMMessage.ChatType.Chat) {
+                            map.put("chatType",0);
+                        } else if (chatType == EMMessage.ChatType.GroupChat) {
+                            map.put("chatType",1);
+                        } else {
+                            map.put("chatType",2);
+                        }
+                        map.put("type","IMAGE");
+                        map.put("body",imgBody.getThumbnailUrl());
+                        map.put("image",imgBody.getRemoteUrl());
+                        map.put("msgId", message.getMsgId());
+                        String fromUser = message.getFrom();
+                        map.put("fromUser",fromUser);
+                        String toUser = message.getTo();
+                        map.put("toUser",toUser);
+                        map.put("time", message.getMsgTime());
+                        result.success(map);
+                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
                     }
                 });
 
@@ -547,6 +641,9 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("error","error");
+                        result.success(map);
                         EasemobResponseHandler.onMsgSendState("error");
                     }
                 });
@@ -558,20 +655,11 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        EasemobResponseHandler.onMsgSendState("sending");
+//                        EasemobResponseHandler.onMsgSendState("sending");
                     }
                 });
             }
         });
-        //发送消息
-        EMClient.getInstance().chatManager().sendMessage(message);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("messageId", message.getMsgId());
-        EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
-        map.put("image", imgBody.getRemoteUrl());
-        String body = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
-        map.put("body", body);
-        result.success(map);
 
     }
 
@@ -591,6 +679,7 @@ public class EasemobHandler {
                 @Override
                 public void run() {
                     EasemobResponseHandler.onMessageReceived(messages);
+                    EasemobResponseHandler.onMessageReceivedFor(messages);
                 }
             });
         }
@@ -602,6 +691,7 @@ public class EasemobHandler {
                 @Override
                 public void run() {
                     EasemobResponseHandler.onMessageReceived(messages);
+                    EasemobResponseHandler.onMessageReceivedFor(messages);
                 }
             });
         }
@@ -642,7 +732,7 @@ public class EasemobHandler {
     }
 
     /**
-     * 获取聊天记录
+     * 获取聊天记录(旧)
      */
     public static void getAllMessages(MethodCall call, MethodChannel.Result result) {
         String username = call.argument("username");
@@ -726,7 +816,85 @@ public class EasemobHandler {
     }
 
     /**
-     * 搜索消息
+     * 获取聊天记录 (类型修改)
+     */
+    public static void getAllMessagesFor(MethodCall call, MethodChannel.Result result) {
+        String username = call.argument("username");
+        System.out.println(username);
+        EMConversation conversation;
+        if ((int)call.argument("chatType") == 2) {
+            conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"), EMConversation.EMConversationType.ChatRoom);
+        } else if ((int)call.argument("chatType") == 1) {
+            conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"), EMConversation.EMConversationType.GroupChat);
+        } else  {
+            conversation = EMClient.getInstance().chatManager().getConversation(call.argument("username"), EMConversation.EMConversationType.Chat);
+        }
+        System.out.println("conversation: " + conversation);
+        //获取此会话的所有消息
+        if (conversation != null) {
+            List<EMMessage> messages = conversation.getAllMessages();
+            List<Map<String, Object>> msgList = new ArrayList<>();
+            for (int i = 0; i < messages.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                EMMessage.ChatType chatType = messages.get(i).getChatType();
+                if (chatType == EMMessage.ChatType.Chat) {
+                    map.put("chatType", 0);
+                } else if (chatType == EMMessage.ChatType.GroupChat) {
+                    map.put("chatType", 1);
+                } else {
+                    map.put("chatType", 2);
+                }
+                EMMessage.Type type = messages.get(i).getType();
+                switch (type) {
+                    case TXT:
+                        map.put("type","TXT");
+                        EMTextMessageBody textBody = (EMTextMessageBody) messages.get(i).getBody();
+                        map.put("body",textBody.getMessage());
+                        break;
+                    case IMAGE:
+                        map.put("type","IMAGE");
+                        EMImageMessageBody imgBody = (EMImageMessageBody) messages.get(i).getBody();
+                        String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
+                        map.put("body",imgBody.getThumbnailUrl());
+                        map.put("image",imgBody.getRemoteUrl());
+                        break;
+                    case VOICE:
+                        map.put("type","VOICE");
+                        EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                        map.put("soundLength",voiceBody.getLength());
+                        map.put("body",voiceBody.getRemoteUrl());
+                        break;
+                    case CMD:
+                        map.put("type","CMD");
+                        break;
+                    case FILE:
+                        map.put("type","FILE");
+                        break;
+                    case VIDEO:
+                        map.put("type","VIDEO");
+                        break;
+                    case LOCATION:
+                        map.put("type","LOCATION");
+                        break;
+                    default:
+                        break;
+                }
+                String msgId = messages.get(i).getMsgId();
+                map.put("msgId",msgId);
+                String fromUser = messages.get(i).getFrom();
+                map.put("fromUser",fromUser);
+                String toUser = messages.get(i).getTo();
+                map.put("toUser",toUser);
+                map.put("time",messages.get(i).getMsgTime());
+                msgList.add(map);
+            }
+            result.success(msgList);
+        }
+        //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
+    }
+
+    /**
+     * 搜索消息（旧）
      */
     public static void searchMessage(MethodCall call, MethodChannel.Result result) {
         String keyWords = call.argument("keyWords");
@@ -796,6 +964,80 @@ public class EasemobHandler {
         result.success(msgList);
     }
 
+    /**
+     * 搜索消息 (类型修改)
+     */
+    public static void searchMessageFor(MethodCall call, MethodChannel.Result result) {
+        String keyWords = call.argument("keyWords");
+        long time = (long)call.argument("time");
+        List<EMMessage> messages = EMClient.getInstance().chatManager().searchMsgFromDB(keyWords,time,50,null, EMConversation.EMSearchDirection.UP);
+        List<Map<String, Object>> msgList = new ArrayList<>();
+        for (int i = 0; i < messages.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            EMMessage.ChatType chatType = messages.get(i).getChatType();
+            if (chatType == EMMessage.ChatType.Chat) {
+                map.put("chatType", 0);
+            } else if (chatType == EMMessage.ChatType.GroupChat) {
+                map.put("chatType", 1);
+            } else {
+                map.put("chatType", 2);
+            }
+            EMMessage.Type type = messages.get(i).getType();
+            switch (type) {
+                case TXT:
+                    map.put("type","TXT");
+                    EMTextMessageBody textBody = (EMTextMessageBody) messages.get(i).getBody();
+                    map.put("body",textBody.getMessage());
+                    break;
+                case IMAGE:
+                    map.put("type","IMAGE");
+                    EMImageMessageBody imgBody = (EMImageMessageBody) messages.get(i).getBody();
+                    String thumbPath = imgBody.thumbnailLocalPath();
+                    if (!new File(thumbPath).exists()) {
+                        // to make it compatible with thumbnail received in previous version
+                        thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+                    }
+                    String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
+                    System.out.println(thumbPath);
+                    map.put("body",thumbPath);
+                    map.put("image",imgBody.getRemoteUrl());
+                    break;
+                case VOICE:
+                    map.put("type","VOICE");
+                    EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                    map.put("soundLength",voiceBody.getLength());
+                    map.put("body",voiceBody.getRemoteUrl());
+                    break;
+                case CMD:
+                    map.put("type","CMD");
+                    break;
+                case FILE:
+                    map.put("type","FILE");
+                    break;
+                case VIDEO:
+                    map.put("type","VIDEO");
+                    break;
+                case LOCATION:
+                    map.put("type","LOCATION");
+                    break;
+                default:
+                    break;
+            }
+            String msgId = messages.get(i).getMsgId();
+            map.put("msgId",msgId);
+            String fromUser = messages.get(i).getFrom();
+            map.put("fromUser",fromUser);
+            String toUser = messages.get(i).getTo();
+            map.put("toUser",toUser);
+            map.put("time",messages.get(i).getMsgTime());
+            msgList.add(map);
+        }
+        result.success(msgList);
+    }
+
+    /**
+     * 暂不可用
+     */
     public static void searchMessageUser(MethodCall call, MethodChannel.Result result) {
         String userName = call.argument("userName");
         long time = (long)call.argument("time");
@@ -865,9 +1107,89 @@ public class EasemobHandler {
     }
 
     /**
-     * 获取更多聊天记录
+     * 获取更多聊天记录(旧)
      */
     public static void getAllMessagesMore(MethodCall call, MethodChannel.Result result) {
+        String username = call.argument("username");
+        String startMsgId = call.argument("startMsgId");
+        EMConversation conversation;
+        if ((int)call.argument("chatType") == 2) {
+            conversation = EMClient.getInstance().chatManager().getConversation(username, EMConversation.EMConversationType.ChatRoom);
+        } else if ((int)call.argument("chatType") == 1) {
+            conversation = EMClient.getInstance().chatManager().getConversation(username, EMConversation.EMConversationType.GroupChat);
+        } else  {
+            conversation = EMClient.getInstance().chatManager().getConversation(username, EMConversation.EMConversationType.Chat);
+        }
+        //获取startMsgId之前的pagesize条消息，此方法获取的messages SDK会自动存入到此会话中，APP中无需再次把获取到的messages添加到会话中
+        List<EMMessage> messages = conversation.loadMoreMsgFromDB(startMsgId, 20);
+        List<Map<String, Object>> msgList = new ArrayList<>();
+        for (int i = 0; i < messages.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            EMMessage.ChatType chatType = messages.get(i).getChatType();
+            if (chatType == EMMessage.ChatType.Chat) {
+                map.put("chatType",0);
+            } else if (chatType == EMMessage.ChatType.GroupChat) {
+                map.put("chatType",1);
+            } else {
+                map.put("chatType",2);
+            }
+            EMMessage.Type type = messages.get(i).getType();
+            switch (type) {
+                case TXT:
+                    map.put("type","TXT");
+                    EMTextMessageBody textBody = (EMTextMessageBody) messages.get(i).getBody();
+                    map.put("body",textBody.getMessage());
+                    break;
+                case IMAGE:
+                    map.put("type","IMAGE");
+                    EMImageMessageBody imgBody = (EMImageMessageBody) messages.get(i).getBody();
+                    String thumbPath = imgBody.thumbnailLocalPath();
+                    if (!new File(thumbPath).exists()) {
+                        // to make it compatible with thumbnail received in previous version
+                        thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+                    }
+                    String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
+                    map.put("body",thumbPath);
+                    map.put("image",imgBody.getRemoteUrl());
+                    break;
+                case VOICE:
+                    map.put("type","VOICE");
+                    EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) messages.get(i).getBody();
+                    map.put("soundLength",voiceBody.getLength());
+                    map.put("body",voiceBody.getRemoteUrl());
+                    break;
+                case CMD:
+                    map.put("type","CMD");
+                    break;
+                case FILE:
+                    map.put("type","FILE");
+                    break;
+                case VIDEO:
+                    map.put("type","VIDEO");
+                    break;
+                case LOCATION:
+                    map.put("type","LOCATION");
+                    break;
+                default:
+                    break;
+            }
+            String msgId = messages.get(i).getMsgId();
+            map.put("msgId",msgId);
+            String fromUser = messages.get(i).getFrom();
+            map.put("fromUser",fromUser);
+            String toUser = messages.get(i).getTo();
+            map.put("toUser",toUser);
+            long receiveTime = messages.get(i).getMsgTime();
+            map.put("time",receiveTime);
+            msgList.add(map);
+        }
+        result.success(msgList);
+    }
+
+    /**
+     * 获取更多聊天记录
+     */
+    public static void getAllMessagesMoreFor(MethodCall call, MethodChannel.Result result) {
         String username = call.argument("username");
         String startMsgId = call.argument("startMsgId");
         EMConversation conversation;
@@ -1058,7 +1380,7 @@ public class EasemobHandler {
                         thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
                     }
                     String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
-                    map.put("body",thumbPath);
+                    map.put("body",imgBody.getThumbnailUrl());
                     map.put("image",imgBody.getRemoteUrl());
                     break;
                 case VOICE:

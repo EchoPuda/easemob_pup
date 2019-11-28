@@ -14,6 +14,7 @@ class EMMessage {
   final String fromUser;
   final String toUser;
   final int time;
+  final String error;
 
   EMMessage.fromMap(Map map)
       : chatType = getChatType(map["chatType"]),
@@ -24,6 +25,7 @@ class EMMessage {
         msgId = map["msgId"],
         fromUser = map["fromUser"],
         time = map["time"],
+        error = map["error"],
         toUser = map["toUser"];
 
 }

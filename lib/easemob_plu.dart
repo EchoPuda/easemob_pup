@@ -97,8 +97,8 @@ Future sendTextMessage(
   return result;
 }
 
-/// 发送文本消息
-Future sendTextMessageForMsgId(
+/// 发送文本消息（额外字段）
+Future sendTextMessageForExtra(
     //对方用户或群聊的id
     String toChatUsername,
     //内容
@@ -110,7 +110,7 @@ Future sendTextMessageForMsgId(
       String extra : "",
     }
     ) async {
-  String result = await _channel.invokeMethod("sendTextMessageForMsgId",{
+  String result = await _channel.invokeMethod("sendTextMessageForExtra",{
     "content" : content,
     "toChatUsername" : toChatUsername,
     "chatType" : chatType,
@@ -120,7 +120,7 @@ Future sendTextMessageForMsgId(
   return result;
 }
 
-/// 发送语音消息
+/// 发送语音消息（旧）
 Future sendVoiceMessage(
     String toChatUsername,
     //语音文件路径
@@ -139,7 +139,26 @@ Future sendVoiceMessage(
   return result;
 }
 
-/// 发送图片消息
+/// 发送语音消息
+Future<EMMessage> sendVoiceMessageFor(
+    String toChatUsername,
+    //语音文件路径
+    String filePath,
+    //录音时间
+    int length,
+    //是否是群聊，默认是单聊0，群聊为1，聊天室为2
+        { int chatType : 0,}
+    ) async {
+  var result = await _channel.invokeMethod("sendVoiceMessage",{
+    "filePath" : filePath,
+    "toChatUsername" : toChatUsername,
+    "length" : length,
+    "chatType" : chatType,
+  });
+  return EMMessage.fromMap(result);
+}
+
+/// 发送图片消息（旧）
 Future sendImageMessage(
     String toChatUsername,
     //图片本地路径
@@ -157,6 +176,26 @@ Future sendImageMessage(
     "chatType" : chatType,
   });
   return result;
+}
+
+/// 发送图片消息
+Future<EMMessage> sendImageMessageFor(
+    String toChatUsername,
+    //图片本地路径
+    String imagePath,
+    {
+      //false默认不发送原图
+      bool originally : false,
+      //是否是群聊，默认是单聊0，群聊为1，聊天室为2
+      int chatType : 0,}
+    ) async {
+  var result = await _channel.invokeMethod("sendImageMessage",{
+    "imagePath" : imagePath,
+    "toChatUsername" : toChatUsername,
+    "originally" : originally,
+    "chatType" : chatType,
+  });
+  return EMMessage.fromMap(result);
 }
 
 Future<bool> getIsConnect() async {
@@ -187,7 +226,7 @@ Future removeMessageListener() async {
   return result;
 }
 
-/// 获取聊天记录
+/// 获取聊天记录(旧)
 Future<ListEMMessage> getAllMessages(String username,{int chatType : 0}) async {
   var result = await _channel.invokeMethod("getAllMessages",{
     "username" : username,
@@ -197,7 +236,17 @@ Future<ListEMMessage> getAllMessages(String username,{int chatType : 0}) async {
   return ListEMMessage.fromList(result);
 }
 
-/// 获取更多聊天记录
+/// 获取聊天记录
+Future<ListEMMessage> getAllMessagesFor(String username,{int chatType : 0}) async {
+  var result = await _channel.invokeMethod("getAllMessagesFor",{
+    "username" : username,
+    "chatType" : chatType,
+  });
+  print(result);
+  return ListEMMessage.fromList(result);
+}
+
+/// 获取更多聊天记录（旧）
 Future<ListEMMessage> getAllMessagesMore(String username, String startMsgId,{int chatType : 0}) async {
   var result = await _channel.invokeMethod("getAllMessagesMore",{
     "username" : username,
@@ -207,9 +256,28 @@ Future<ListEMMessage> getAllMessagesMore(String username, String startMsgId,{int
   return ListEMMessage.fromList(result);
 }
 
-/// 搜索消息
+/// 获取更多聊天记录
+Future<ListEMMessage> getAllMessagesMoreFor(String username, String startMsgId,{int chatType : 0}) async {
+  var result = await _channel.invokeMethod("getAllMessagesMoreFor",{
+    "username" : username,
+    "startMsgId" : startMsgId,
+    "chatType" : chatType,
+  });
+  return ListEMMessage.fromList(result);
+}
+
+/// 搜索消息（旧）
 Future<ListEMMessage> searchMessage(String keyWords, int time) async {
   var result = await _channel.invokeMethod("searchMessage",{
+    "keyWords" : keyWords,
+    "time" : time,
+  });
+  return ListEMMessage.fromList(result);
+}
+
+/// 搜索消息
+Future<ListEMMessage> searchMessageFor(String keyWords, int time) async {
+  var result = await _channel.invokeMethod("searchMessageFor",{
     "keyWords" : keyWords,
     "time" : time,
   });
@@ -694,10 +762,15 @@ StreamController<String> _loginController = new StreamController.broadcast();
 
 Stream<String> get responseFromLogin => _loginController.stream;
 
-/// 接收消息
+/// 接收消息 (旧)
 StreamController<ListEMMessage> _msgListenerController = new StreamController.broadcast();
 
 Stream<ListEMMessage> get responseFromMsgListener => _msgListenerController.stream;
+
+/// 接收消息
+StreamController<ListEMMessage> _msgListenerControllerFor = new StreamController.broadcast();
+
+Stream<ListEMMessage> get responseFromMsgForListener => _msgListenerControllerFor.stream;
 
 /// 获取会话监听（获取所有会话后使用）
 StreamController<Map<String, EMConversation>> _onConversationGetController = new StreamController.broadcast();
@@ -900,6 +973,8 @@ Future<dynamic> _handler(MethodCall methodCall) {
     _onConferenceSpeakersChangeController.add(methodCall.arguments);
   } else if ("onReceiveConferenceInvite" == methodCall.method) {
     _onConferenceReceiveInviteController.add(ConferenceInviteMsg.formMap(methodCall.arguments));
+  } else if ("emMsgForListener" == methodCall.method) {
+    _msgListenerControllerFor.add(ListEMMessage.fromList(methodCall.arguments));
   }
   return Future.value(true);
 }
