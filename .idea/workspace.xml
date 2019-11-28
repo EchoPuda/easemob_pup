@@ -7,9 +7,7 @@
     <bookmark url="file://$PROJECT_DIR$/../../rhinoProject/9-10/rhino/lib/page/chatroom/ChatRoomPage.dart" description="     }&#10;     // 0 红包总金额  1 红包个数  2 备注&#10;     List res..." line="581" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -196,13 +194,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00030" summary="语音通话demo修改">
-      <created>1569482933397</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1569482933397</updated>
     </task>
     <task id="LOCAL-00031" summary="增加获取未读消息总数功能">
       <created>1569565780375</created>
@@ -540,7 +531,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574905869649</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="发送消息更新状态方法">
+      <created>1574906146072</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1574906146072</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="TodoView">
@@ -554,7 +552,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="2" width="965" height="1047" extended-state="1" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.44088396" />
       <window_info id="Captures" order="1" side_tool="true" />

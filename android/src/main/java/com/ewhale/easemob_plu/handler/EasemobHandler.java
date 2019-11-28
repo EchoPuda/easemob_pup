@@ -307,6 +307,7 @@ public class EasemobHandler {
         } else if (chatType == 2) {
             message.setChatType(EMMessage.ChatType.ChatRoom);
         }
+        String msgId = message.getMsgId();
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
         result.success(message.getMsgId());
@@ -317,7 +318,8 @@ public class EasemobHandler {
                     @Override
                     public void run() {
                         System.out.println("messageId:" + message.getMsgId());
-                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
+                        System.out.println("messageId:" + msgId);
+                        EasemobResponseHandler.onMsgSendState(msgId);
                     }
                 });
             }
