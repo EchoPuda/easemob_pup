@@ -7,8 +7,8 @@
     <bookmark url="file://$PROJECT_DIR$/../../rhinoProject/9-10/rhino/lib/page/chatroom/ChatRoomPage.dart" description="     }&#10;     // 0 红包总金额  1 红包个数  2 备注&#10;     List res..." line="581" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="发送消息更新状态方法">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -195,13 +195,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00032" summary="登录回调异常。强行加载">
-      <created>1569582693098</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1569582693098</updated>
     </task>
     <task id="LOCAL-00033" summary="增加退出回调判断">
       <created>1569584056266</created>
@@ -539,7 +532,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574907198829</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="发送消息更新状态方法">
+      <created>1574907593416</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1574907593416</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TodoView">
@@ -553,6 +553,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="5" y="0" width="965" height="1047" extended-state="1" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.44088396" />
       <window_info id="Captures" order="1" side_tool="true" />

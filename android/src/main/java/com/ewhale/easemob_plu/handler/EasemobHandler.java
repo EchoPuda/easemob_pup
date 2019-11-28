@@ -310,16 +310,15 @@ public class EasemobHandler {
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
         String msgId = message.getMsgId();
-        result.success(message.getMsgId());
+
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("messageId:" + message.getMsgId());
-                        System.out.println("messageId0:" + msgId);
-                        EasemobResponseHandler.onMsgSendState(msgId);
+                        result.success(message.getMsgId());
+                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
                     }
                 });
             }
@@ -330,6 +329,7 @@ public class EasemobHandler {
                     @Override
                     public void run() {
                         EasemobResponseHandler.onMsgSendState("error");
+                        result.success("error");
                     }
                 });
             }
