@@ -316,7 +316,7 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        android.util.Log.d(TAG, message.getMsgId());
+                        System.out.println("messageId:" + message.getMsgId());
                         EasemobResponseHandler.onMsgSendState(message.getMsgId());
                     }
                 });
