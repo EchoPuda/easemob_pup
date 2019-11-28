@@ -140,6 +140,7 @@ Future sendVoiceMessage(
 }
 
 /// 发送语音消息
+/// 先判断error是否为空，为空发送成功
 Future<EMMessage> sendVoiceMessageFor(
     String toChatUsername,
     //语音文件路径
@@ -149,7 +150,7 @@ Future<EMMessage> sendVoiceMessageFor(
     //是否是群聊，默认是单聊0，群聊为1，聊天室为2
         { int chatType : 0,}
     ) async {
-  var result = await _channel.invokeMethod("sendVoiceMessage",{
+  var result = await _channel.invokeMethod("sendVoiceMessageFor",{
     "filePath" : filePath,
     "toChatUsername" : toChatUsername,
     "length" : length,
@@ -179,6 +180,7 @@ Future sendImageMessage(
 }
 
 /// 发送图片消息
+/// 先判断error是否为空，为空发送成功
 Future<EMMessage> sendImageMessageFor(
     String toChatUsername,
     //图片本地路径
@@ -189,7 +191,7 @@ Future<EMMessage> sendImageMessageFor(
       //是否是群聊，默认是单聊0，群聊为1，聊天室为2
       int chatType : 0,}
     ) async {
-  var result = await _channel.invokeMethod("sendImageMessage",{
+  var result = await _channel.invokeMethod("sendImageMessageFor",{
     "imagePath" : imagePath,
     "toChatUsername" : toChatUsername,
     "originally" : originally,
