@@ -106,7 +106,7 @@ Future sendTextMessageForExtra(
     //是否是群聊，默认是单聊0，群聊为1，聊天室为2
     {
       int chatType : 0,
-      String extraName : "",
+//      String extraName : "",
       String extra : "",
     }
     ) async {
@@ -114,7 +114,7 @@ Future sendTextMessageForExtra(
     "content" : content,
     "toChatUsername" : toChatUsername,
     "chatType" : chatType,
-    "extraName" : extraName,
+    "extraName" : "extra",
     "extra" : extra,
   });
   return result;

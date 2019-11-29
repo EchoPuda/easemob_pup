@@ -358,9 +358,8 @@ public class EasemobHandler {
         String extra = call.argument("extra");
         String extraName = call.argument("extraName");
         if (!"".equals(extraName)) {
-            message.setAttribute(extraName, extra);
         }
-
+        message.setAttribute("extra", extra);
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
 
@@ -608,6 +607,7 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
                         EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
                         Map<String, Object> map = new HashMap<>();
                         map.put("msgId",message.getMsgId());
@@ -629,7 +629,6 @@ public class EasemobHandler {
                         map.put("toUser",toUser);
                         map.put("time", message.getMsgTime());
                         result.success(map);
-                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
                     }
                 });
 
@@ -879,6 +878,10 @@ public class EasemobHandler {
                     default:
                         break;
                 }
+                String extra = messages.get(i).getStringAttribute("extra","");
+                if (!extra.isEmpty()) {
+                    map.put("extra",extra);
+                }
                 String msgId = messages.get(i).getMsgId();
                 map.put("msgId",msgId);
                 String fromUser = messages.get(i).getFrom();
@@ -1022,6 +1025,10 @@ public class EasemobHandler {
                     break;
                 default:
                     break;
+            }
+            String extra = messages.get(i).getStringAttribute("extra","");
+            if (!extra.isEmpty()) {
+                map.put("extra",extra);
             }
             String msgId = messages.get(i).getMsgId();
             map.put("msgId",msgId);
@@ -1253,6 +1260,10 @@ public class EasemobHandler {
                 default:
                     break;
             }
+            String extra = messages.get(i).getStringAttribute("extra","");
+            if (!extra.isEmpty()) {
+                map.put("extra",extra);
+            }
             String msgId = messages.get(i).getMsgId();
             map.put("msgId",msgId);
             String fromUser = messages.get(i).getFrom();
@@ -1403,6 +1414,10 @@ public class EasemobHandler {
                     break;
                 default:
                     break;
+            }
+            String extra = emMessage.getStringAttribute("extra","");
+            if (!extra.isEmpty()) {
+                map.put("extra",extra);
             }
             long receiveTime = emMessage.getMsgTime();
             map.put("lastMsgTime",receiveTime);

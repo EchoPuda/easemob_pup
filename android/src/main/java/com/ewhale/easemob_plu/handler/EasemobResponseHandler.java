@@ -10,6 +10,7 @@ import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.EMVoiceMessageBody;
+import com.hyphenate.exceptions.HyphenateException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -173,6 +174,10 @@ public class EasemobResponseHandler {
                     break;
                 default:
                     break;
+            }
+            String extra = messages.get(i).getStringAttribute("extra","");
+            if (!extra.isEmpty()) {
+                map.put("extra",extra);
             }
             String msgId = messages.get(i).getMsgId();
             map.put("msgId",msgId);
