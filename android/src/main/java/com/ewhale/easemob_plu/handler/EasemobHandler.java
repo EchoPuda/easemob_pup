@@ -250,10 +250,16 @@ public class EasemobHandler {
     }
 
     /**
-     * 退出登录
+     * 获取连接状态
      */
     public static void getIsConnect(MethodCall call, MethodChannel.Result result) {
-        boolean isConnect = EMClient.getInstance().isConnected();
+        boolean isConnect;
+        if(EMClient.getInstance() == null) {
+            isConnect = false;
+        } else {
+            isConnect = EMClient.getInstance().isConnected();
+        }
+
         result.success(isConnect);
     }
 
@@ -369,7 +375,7 @@ public class EasemobHandler {
                 registrar.activity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        EasemobResponseHandler.onMsgSendState("success");
+                        EasemobResponseHandler.onMsgSendState(message.getMsgId());
                         result.success(message.getMsgId());
                     }
                 });
