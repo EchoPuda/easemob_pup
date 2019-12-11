@@ -1428,8 +1428,8 @@ public class EasemobHandler {
             long receiveTime = emMessage.getMsgTime();
             map.put("lastMsgTime",receiveTime);
             listMap.put(key,map);
-            EasemobResponseHandler.onConversationGet(listMap);
         }
+        EasemobResponseHandler.onConversationGet(listMap);
     }
 
     /**
