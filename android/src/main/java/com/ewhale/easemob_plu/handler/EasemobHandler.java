@@ -21,6 +21,7 @@ import com.ewhale.easemob_plu.utils.PhoneStateManager;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
+import com.hyphenate.EMConversationListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMGroupChangeListener;
 import com.hyphenate.EMMessageListener;
@@ -1430,8 +1431,20 @@ public class EasemobHandler {
             listMap.put(key,map);
         }
         System.out.println("android: 新消息");
+        result.success(listMap);
         EasemobResponseHandler.onConversationGet(listMap);
     }
+
+    public static void addNewConversations(MethodCall call, MethodChannel.Result result) {
+        EMClient.getInstance().chatManager().addConversationListener(emConversationListener);
+    }
+
+    private static EMConversationListener emConversationListener = new EMConversationListener() {
+        @Override
+        public void onCoversationUpdate() {
+            EasemobResponseHandler.onConversationUpdate();
+        }
+    };
 
     /**
      * 删除某个user会话，如果需要保留聊天记录，传false

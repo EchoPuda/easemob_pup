@@ -332,6 +332,17 @@ Future getAllConversations() async {
   return result;
 }
 
+/// 获取所有会话
+Future<Map<String, EMConversation>> addNewConversations() async {
+  var result = await _channel.invokeMethod("addNewConversations");
+  Map<String, EMConversation> mapConversation = new Map();
+  Iterable iterable = result.keys;
+  iterable.forEach((key){
+    mapConversation[key] = EMConversation.fromMap(result[key]);
+  });
+  return mapConversation;
+}
+
 /// 删除会话
 /// 删除某个user会话，如果需要保留聊天记录，传false
 Future deleteConversation(String username, {bool isDelHistory : true}) async {
@@ -779,6 +790,11 @@ StreamController<Map<String, EMConversation>> _onConversationGetController = new
 
 Stream<Map<String, EMConversation>> get responseFromConversationGet => _onConversationGetController.stream;
 
+/// 监听会话改变
+StreamController<String> _onConversationUpdateController = new StreamController.broadcast();
+
+Stream<String> get responseFromConversationUpdate => _onConversationUpdateController.stream;
+
 /// 监听好友状态事件
 /// 登录成功自动注册了监听
 StreamController<Contact> _contactListenerController = new StreamController.broadcast();
@@ -977,6 +993,8 @@ Future<dynamic> _handler(MethodCall methodCall) {
     _onConferenceReceiveInviteController.add(ConferenceInviteMsg.formMap(methodCall.arguments));
   } else if ("emMsgForListener" == methodCall.method) {
     _msgListenerControllerFor.add(ListEMMessage.fromList(methodCall.arguments));
+  } else if ("onConversationUpdate" == methodCall.method) {
+    _onConversationGetController.add(methodCall.arguments);
   }
   return Future.value(true);
 }

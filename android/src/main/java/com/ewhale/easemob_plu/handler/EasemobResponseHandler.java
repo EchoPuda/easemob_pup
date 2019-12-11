@@ -192,6 +192,10 @@ public class EasemobResponseHandler {
 
     }
 
+    public static void onConversationUpdate(){
+        channel.invokeMethod("onConversationUpdate", "update");
+    }
+
     public static void onContactListener(String username, int type){
         Map<String, Object> map = new HashMap<>();
         map.put("username", username);
