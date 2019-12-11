@@ -1429,6 +1429,7 @@ public class EasemobHandler {
             map.put("lastMsgTime",receiveTime);
             listMap.put(key,map);
         }
+        System.out.println("android: 新消息");
         EasemobResponseHandler.onConversationGet(listMap);
     }
 

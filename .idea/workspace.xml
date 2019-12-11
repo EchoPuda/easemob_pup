@@ -7,10 +7,7 @@
     <bookmark url="file://$PROJECT_DIR$/../../rhinoProject/9-10/rhino/lib/page/chatroom/ChatRoomPage.dart" description="     }&#10;     // 0 红包总金额  1 红包个数  2 备注&#10;     List res..." line="581" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="判空">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" afterDir="false" />
-    </list>
+    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -26,7 +23,7 @@
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="fd28aa76" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="882QAEUS8YVYK" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
@@ -289,13 +286,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00039" summary="线程修改">
-      <created>1569651528015</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1569651528015</updated>
     </task>
     <task id="LOCAL-00040" summary="群组信息增加">
       <created>1569652213050</created>
@@ -633,7 +623,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576044901204</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="会话接收监听修改">
+      <created>1576059662884</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1576059662885</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="TodoView">
@@ -647,6 +644,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="7" y="0" width="965" height="1047" extended-state="1" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34696132" />
       <window_info id="Captures" order="1" side_tool="true" />
@@ -719,7 +717,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="增加通话error状态" />
     <MESSAGE value="电话铃声" />
     <MESSAGE value="修改群名称和屏蔽设置" />
     <MESSAGE value="修改群名称和屏蔽设置,线程处理" />
@@ -744,7 +741,8 @@
     <MESSAGE value="重构方法" />
     <MESSAGE value="额外消息接收添加" />
     <MESSAGE value="判空" />
-    <option name="LAST_COMMIT_MESSAGE" value="判空" />
+    <MESSAGE value="会话接收监听修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="会话接收监听修改" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../../../common/flutter/packages/flutter/lib/src/services/message_codecs.dart">
