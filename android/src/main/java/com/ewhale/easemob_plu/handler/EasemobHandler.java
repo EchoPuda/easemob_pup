@@ -1438,28 +1438,28 @@ public class EasemobHandler {
             listMap.put(key,map);
         }
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            HashMap<String, HashMap<String, Object>> sortMap = listMap
-                    .entrySet()
-                    .stream()
-                    .sorted(new Comparator<Map.Entry<String, HashMap<String, Object>>>() {
-                        @Override
-                        public int compare(Map.Entry<String, HashMap<String, Object>> o1, Map.Entry<String, HashMap<String, Object>> o2) {
-                            if ((long)o1.getValue().get("lastMsgTime") < (long)o2.getValue().get("lastMsgTime")) {
-                                return -1;
-                            } else if ((long)o1.getValue().get("lastMsgTime") == (long)o2.getValue().get("lastMsgTime")) {
-                                return 0;
-                            } else {
-                                return 1;
-                            }
-                        }
-                    })
-                    .collect(
-                            toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new)
-                    );
-                System.out.println(sortMap.values().iterator().next().get("lastMsgTime"));
-        }
-        System.out.println("会话消息：" + listMap.toString());
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+//            HashMap<String, HashMap<String, Object>> sortMap = listMap
+//                    .entrySet()
+//                    .stream()
+//                    .sorted(new Comparator<Map.Entry<String, HashMap<String, Object>>>() {
+//                        @Override
+//                        public int compare(Map.Entry<String, HashMap<String, Object>> o1, Map.Entry<String, HashMap<String, Object>> o2) {
+//                            if ((long)o1.getValue().get("lastMsgTime") < (long)o2.getValue().get("lastMsgTime")) {
+//                                return -1;
+//                            } else if ((long)o1.getValue().get("lastMsgTime") == (long)o2.getValue().get("lastMsgTime")) {
+//                                return 0;
+//                            } else {
+//                                return 1;
+//                            }
+//                        }
+//                    })
+//                    .collect(
+//                            toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new)
+//                    );
+//                System.out.println(sortMap.values().iterator().next().get("lastMsgTime"));
+//        }
+        System.out.println("会话消息------------------------------------------------");
 
         result.success(listMap);
         EasemobResponseHandler.onConversationGet(listMap);
