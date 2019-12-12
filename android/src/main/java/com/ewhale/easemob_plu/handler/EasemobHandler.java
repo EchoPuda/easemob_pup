@@ -54,6 +54,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -1442,7 +1443,7 @@ public class EasemobHandler {
             HashMap<String, HashMap<String, Object>> sortMap = listMap
                     .entrySet()
                     .stream()
-                    .sorted(new Comparator<Map.Entry<String, HashMap<String, Object>>>() {
+                    .sorted(Collections.reverseOrder(new Comparator<Map.Entry<String, HashMap<String, Object>>>() {
                         @Override
                         public int compare(Map.Entry<String, HashMap<String, Object>> o1, Map.Entry<String, HashMap<String, Object>> o2) {
                             if ((long)o1.getValue().get("lastMsgTime") < (long)o2.getValue().get("lastMsgTime")) {
@@ -1453,7 +1454,7 @@ public class EasemobHandler {
                                 return 1;
                             }
                         }
-                    })
+                    }))
                     .collect(
                             toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new)
                     );
