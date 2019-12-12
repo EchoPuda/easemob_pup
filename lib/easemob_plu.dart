@@ -998,7 +998,7 @@ Future<dynamic> _handler(MethodCall methodCall) {
   } else if ("emMsgForListener" == methodCall.method) {
     _msgListenerControllerFor.add(ListEMMessage.fromList(methodCall.arguments));
   } else if ("onConversationUpdate" == methodCall.method) {
-    _onConversationGetController.add(methodCall.arguments);
+    _onConversationUpdateController.add(methodCall.arguments);
   }
   return Future.value(true);
 }
