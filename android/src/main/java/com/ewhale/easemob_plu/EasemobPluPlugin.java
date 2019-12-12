@@ -1,5 +1,7 @@
 package com.ewhale.easemob_plu;
 
+import android.os.Build;
+
 import com.ewhale.easemob_plu.handler.ConferenceHandler;
 import com.ewhale.easemob_plu.handler.ConferenceResponseHandler;
 import com.ewhale.easemob_plu.handler.EasemobHandler;
@@ -68,7 +70,11 @@ public class EasemobPluPlugin implements MethodCallHandler {
     } else if (call.method.equals("getAllMsgCount")) {
       EasemobHandler.getAllMsgCount(call,result);
     } else if (call.method.equals("getAllConversations")) {
-      EasemobHandler.getAllConversations(call,result);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            EasemobHandler.getAllConversations(call,result);
+        } else {
+            EasemobHandler.getAllConversationsNotSort(call,result);
+        }
     } else if (call.method.equals("deleteConversation")) {
       EasemobHandler.deleteConversation(call,result);
     } else if (call.method.equals("getAllContactsFromServer")) {

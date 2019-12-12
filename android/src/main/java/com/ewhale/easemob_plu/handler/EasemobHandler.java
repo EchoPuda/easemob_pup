@@ -1463,7 +1463,83 @@ public class EasemobHandler {
         EasemobResponseHandler.onConversationGet(listMap);
     }
 
+    public static void getAllConversationsNotSort(MethodCall call, MethodChannel.Result result) {
+        Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
+        Set<String> keys = conversations.keySet();
+        Iterator<String> iterator = keys.iterator();
+        HashMap<String, HashMap<String, Object>> listMap = new HashMap<>();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            EMConversation emConversation = conversations.get(key);
+            HashMap<String, Object> map = new HashMap<>();
+            if (emConversation != null) {
+                EMConversation.EMConversationType type = emConversation.getType();
+                if (type == EMConversation.EMConversationType.Chat) {
+                    map.put("chatType","Chat");
+                } else if (type == EMConversation.EMConversationType.GroupChat) {
+                    map.put("chatType","GroupChat");
+                } else if (type == EMConversation.EMConversationType.ChatRoom) {
+                    map.put("chatType","ChatRoom");
+                }
+            }
+            assert emConversation != null;
+            String conversationId = emConversation.conversationId();
+            map.put("conversationId", conversationId);
+            int unReadCount = emConversation.getUnreadMsgCount();
+            map.put("unReadCount", unReadCount);
+            EMMessage emMessage = emConversation.getLastMessage();
+            EMMessage.Type type = emMessage.getType();
+            switch (type) {
+                case TXT:
+                    map.put("type","TXT");
+                    EMTextMessageBody textBody = (EMTextMessageBody) emMessage.getBody();
+                    map.put("body",textBody.getMessage());
+                    break;
+                case IMAGE:
+                    map.put("type","IMAGE");
+                    EMImageMessageBody imgBody = (EMImageMessageBody) emMessage.getBody();
+                    String thumbPath = imgBody.thumbnailLocalPath();
+                    if (!new File(thumbPath).exists()) {
+                        // to make it compatible with thumbnail received in previous version
+                        thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
+                    }
+                    String imagePath = EaseImageUtils.getImagePath(imgBody.getRemoteUrl());
+                    map.put("body",imgBody.getThumbnailUrl());
+                    map.put("image",imgBody.getRemoteUrl());
+                    break;
+                case VOICE:
+                    map.put("type","VOICE");
+                    EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) emMessage.getBody();
+                    map.put("soundLength",voiceBody.getLength());
+                    map.put("body",voiceBody.getRemoteUrl());
+                    break;
+                case CMD:
+                    map.put("type","CMD");
+                    break;
+                case FILE:
+                    map.put("type","FILE");
+                    break;
+                case VIDEO:
+                    map.put("type","VIDEO");
+                    break;
+                case LOCATION:
+                    map.put("type","LOCATION");
+                    break;
+                default:
+                    break;
+            }
+            String extra = emMessage.getStringAttribute("extra","");
+            if (!extra.isEmpty()) {
+                map.put("extra",extra);
+            }
+            long receiveTime = emMessage.getMsgTime();
+            map.put("lastMsgTime",receiveTime);
+            listMap.put(key,map);
+        }
 
+        result.success(listMap);
+        EasemobResponseHandler.onConversationGet(listMap);
+    }
 
     /**
      * 删除某个user会话，如果需要保留聊天记录，传false
