@@ -7,7 +7,13 @@
     <bookmark url="file://$PROJECT_DIR$/../../rhinoProject/9-10/rhino/lib/page/chatroom/ChatRoomPage.dart" description="     }&#10;     // 0 红包总金额  1 红包个数  2 备注&#10;     List res..." line="581" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="" />
+    <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/EasemobPluPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/EasemobPluPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobResponseHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/easemob_plu.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/easemob_plu.dart" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -29,8 +35,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/easemob_plu.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="693">
-              <caret line="1000" column="62" lean-forward="true" selection-start-line="1000" selection-start-column="62" selection-end-line="1000" selection-end-column="62" />
+            <state relative-caret-position="597">
+              <caret line="334" column="55" lean-forward="true" selection-start-line="334" selection-start-column="55" selection-end-line="334" selection-end-column="55" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -286,13 +292,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00046" summary="修改群名称和屏蔽设置,线程处理">
-      <created>1570607536453</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1570607536453</updated>
     </task>
     <task id="LOCAL-00047" summary="群详情获取，线程处理">
       <created>1570612085970</created>
@@ -630,7 +629,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576116019762</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="会话更新调整">
+      <created>1576116300511</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1576116300511</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="TodoView">
@@ -643,10 +649,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="7" y="0" width="965" height="1047" extended-state="1" />
+    <frame x="7" y="0" width="965" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34696132" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.34696132" />
       <window_info id="Captures" order="1" side_tool="true" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -667,13 +673,13 @@
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32092005" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.3275488" />
       <window_info anchor="bottom" id="Find" order="11" />
-      <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
-      <window_info anchor="right" id="Capture Analysis" order="1" />
-      <window_info anchor="right" id="Theme Preview" order="2" />
-      <window_info anchor="right" id="Flutter Inspector" order="3" />
-      <window_info anchor="right" id="Palette&#9;" order="4" />
-      <window_info anchor="right" id="Flutter Outline" order="5" weight="0.32932165" />
-      <window_info anchor="right" id="Assistant" order="6" weight="0.32932165" />
+      <window_info anchor="right" id="Capture Analysis" order="0" />
+      <window_info anchor="right" id="Theme Preview" order="1" />
+      <window_info anchor="right" id="Flutter Inspector" order="2" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info anchor="right" id="Flutter Outline" order="4" weight="0.32932165" />
+      <window_info anchor="right" id="Assistant" order="5" weight="0.32932165" />
+      <window_info anchor="right" id="Device File Explorer" order="6" side_tool="true" weight="0.32928178" />
     </layout>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -1045,8 +1051,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/easemob_plu.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="1000" column="62" lean-forward="true" selection-start-line="1000" selection-start-column="62" selection-end-line="1000" selection-end-column="62" />
+        <state relative-caret-position="597">
+          <caret line="334" column="55" lean-forward="true" selection-start-line="334" selection-start-column="55" selection-end-line="334" selection-end-column="55" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>

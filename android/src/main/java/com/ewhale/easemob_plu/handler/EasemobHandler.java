@@ -93,6 +93,7 @@ public class EasemobHandler {
         options.setAutoTransferMessageAttachments((boolean) call.argument("autoTransferMessageAttachments"));
         options.setAutoDownloadThumbnail((boolean) call.argument("autoDownloadThumbnail"));
         options.setAutoLogin((boolean) call.argument("autoLogin"));
+        options.setSortMessageByServerTime(true);
 
         int pid = android.os.Process.myPid();
         String processAppName = getAppName(pid);
@@ -1434,22 +1435,6 @@ public class EasemobHandler {
         result.success(listMap);
         EasemobResponseHandler.onConversationGet(listMap);
     }
-
-    public static void addNewConversations(MethodCall call, MethodChannel.Result result) {
-        EMClient.getInstance().chatManager().addConversationListener(emConversationListener);
-    }
-
-    public static void removeNewConversations(MethodCall call, MethodChannel.Result result) {
-        EMClient.getInstance().chatManager().removeConversationListener(emConversationListener);
-    }
-
-    private static EMConversationListener emConversationListener = new EMConversationListener() {
-        @Override
-        public void onCoversationUpdate() {
-            System.out.println("conversationUpdate");
-            EasemobResponseHandler.onConversationUpdate();
-        }
-    };
 
     /**
      * 删除某个user会话，如果需要保留聊天记录，传false
