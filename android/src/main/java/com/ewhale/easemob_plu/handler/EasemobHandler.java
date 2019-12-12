@@ -7,15 +7,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 
+import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.ewhale.easemob_plu.R;
 import com.ewhale.easemob_plu.utils.CallReceiver;
+import com.ewhale.easemob_plu.utils.ComparatorToConversation;
 import com.ewhale.easemob_plu.utils.EaseImageUtils;
 import com.ewhale.easemob_plu.utils.PhoneStateManager;
 import com.hyphenate.EMCallBack;
@@ -51,9 +54,11 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,6 +70,7 @@ import io.flutter.plugin.common.PluginRegistry;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static com.hyphenate.chat.EMClient.TAG;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * 请求方法处理
@@ -1358,6 +1364,7 @@ public class EasemobHandler {
     /**
      * 获取所有会话
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static void getAllConversations(MethodCall call, MethodChannel.Result result) {
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         Set<String> keys = conversations.keySet();
@@ -1431,10 +1438,32 @@ public class EasemobHandler {
             map.put("lastMsgTime",receiveTime);
             listMap.put(key,map);
         }
-        System.out.println("android: 新消息");
+
+        HashMap<String, HashMap<String, Object>> sortMap = listMap
+                .entrySet()
+                .stream()
+                .sorted(new Comparator<Map.Entry<String, HashMap<String, Object>>>() {
+                    @Override
+                    public int compare(Map.Entry<String, HashMap<String, Object>> o1, Map.Entry<String, HashMap<String, Object>> o2) {
+                        if ((long)o1.getValue().get("lastMsgTime") < (long)o2.getValue().get("lastMsgTime")) {
+                            return -1;
+                        } else if ((long)o1.getValue().get("lastMsgTime") == (long)o2.getValue().get("lastMsgTime")) {
+                            return 0;
+                        } else {
+                            return 1;
+                        }
+                    }
+                })
+                .collect(
+                        toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new)
+                );
+
+        System.out.println(sortMap.toString());
         result.success(listMap);
         EasemobResponseHandler.onConversationGet(listMap);
     }
+
+
 
     /**
      * 删除某个user会话，如果需要保留聊天记录，传false

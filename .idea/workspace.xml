@@ -8,11 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="22f737c7-d522-4725-b2db-3339aef3354e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/utils/ComparatorToConversation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/EasemobPluPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/EasemobPluPlugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/ewhale/easemob_plu/handler/EasemobResponseHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/easemob_plu.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/easemob_plu.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -35,8 +33,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/easemob_plu.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="597">
-              <caret line="334" column="55" lean-forward="true" selection-start-line="334" selection-start-column="55" selection-end-line="334" selection-end-column="55" />
+            <state relative-caret-position="2237">
+              <caret line="344" column="34" lean-forward="true" selection-start-line="344" selection-start-column="34" selection-end-line="344" selection-end-column="34" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -292,13 +290,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00047" summary="群详情获取，线程处理">
-      <created>1570612085970</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1570612085970</updated>
     </task>
     <task id="LOCAL-00048" summary="群详情获取，调试">
       <created>1570612326397</created>
@@ -636,7 +627,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576116300511</updated>
     </task>
-    <option name="localTasksCounter" value="96" />
+    <task id="LOCAL-00096" summary="会话更新调整">
+      <created>1576118337750</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1576118337750</updated>
+    </task>
+    <option name="localTasksCounter" value="97" />
     <servers />
   </component>
   <component name="TodoView">
@@ -652,7 +650,7 @@
     <frame x="7" y="0" width="965" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.34696132" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34696132" />
       <window_info id="Captures" order="1" side_tool="true" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -1051,8 +1049,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/easemob_plu.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="597">
-          <caret line="334" column="55" lean-forward="true" selection-start-line="334" selection-start-column="55" selection-end-line="334" selection-end-column="55" />
+        <state relative-caret-position="2237">
+          <caret line="344" column="34" lean-forward="true" selection-start-line="344" selection-start-column="34" selection-end-line="344" selection-end-column="34" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
