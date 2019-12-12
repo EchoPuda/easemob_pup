@@ -1361,7 +1361,7 @@ public class EasemobHandler {
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
         Set<String> keys = conversations.keySet();
         Iterator<String> iterator = keys.iterator();
-        HashMap<String, HashMap<String, Object>> listMap = new HashMap<>();
+        Map<String, Map<String, Object>> listMap = new HashMap<>();
         while (iterator.hasNext()) {
             String key = iterator.next();
             EMConversation emConversation = conversations.get(key);
