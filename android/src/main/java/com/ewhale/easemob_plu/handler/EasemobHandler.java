@@ -1458,7 +1458,6 @@ public class EasemobHandler {
                     .collect(
                             toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new)
                     );
-                System.out.println(sortMap.values().iterator().next().get("lastMsgTime"));
             result.success(sortMap);
         } else {
             result.success(listMap);
