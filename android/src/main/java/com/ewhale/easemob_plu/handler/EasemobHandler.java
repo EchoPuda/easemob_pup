@@ -1459,7 +1459,7 @@ public class EasemobHandler {
                     );
                 System.out.println(sortMap.values().iterator().next().get("lastMsgTime"));
         }
-
+        System.out.println("会话消息：" + listMap.toString());
 
         result.success(listMap);
         EasemobResponseHandler.onConversationGet(listMap);
