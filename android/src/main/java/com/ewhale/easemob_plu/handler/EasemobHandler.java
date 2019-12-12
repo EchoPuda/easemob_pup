@@ -1446,6 +1446,7 @@ public class EasemobHandler {
     private static EMConversationListener emConversationListener = new EMConversationListener() {
         @Override
         public void onCoversationUpdate() {
+            System.out.println("conversationUpdate");
             EasemobResponseHandler.onConversationUpdate();
         }
     };

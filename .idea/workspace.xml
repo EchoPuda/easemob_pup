@@ -29,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/easemob_plu.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="336" column="25" lean-forward="true" selection-start-line="336" selection-start-column="25" selection-end-line="336" selection-end-column="25" />
+            <state relative-caret-position="693">
+              <caret line="1000" column="62" lean-forward="true" selection-start-line="1000" selection-start-column="62" selection-end-line="1000" selection-end-column="62" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -286,13 +286,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1567395717893</updated>
-    </task>
-    <task id="LOCAL-00045" summary="修改群名称和屏蔽设置">
-      <created>1570606189542</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1570606189542</updated>
     </task>
     <task id="LOCAL-00046" summary="修改群名称和屏蔽设置,线程处理">
       <created>1570607536453</created>
@@ -630,7 +623,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576114798904</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="会话更新调整">
+      <created>1576116019761</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1576116019762</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="TodoView">
@@ -643,7 +643,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="7" y="0" width="965" height="1047" extended-state="0" />
+    <frame x="7" y="0" width="965" height="1047" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34696132" />
@@ -717,7 +717,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改群名称和屏蔽设置,线程处理" />
     <MESSAGE value="群详情获取，线程处理" />
     <MESSAGE value="群详情获取，调试" />
     <MESSAGE value="bug修改" />
@@ -742,7 +741,8 @@
     <MESSAGE value="会话接收监听修改" />
     <MESSAGE value="会话接收监听修改，增加会话更新监听" />
     <MESSAGE value="获取所有会话调整" />
-    <option name="LAST_COMMIT_MESSAGE" value="获取所有会话调整" />
+    <MESSAGE value="会话更新调整" />
+    <option name="LAST_COMMIT_MESSAGE" value="会话更新调整" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../../../common/flutter/packages/flutter/lib/src/services/message_codecs.dart">
@@ -1045,8 +1045,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/easemob_plu.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="336" column="25" lean-forward="true" selection-start-line="336" selection-start-column="25" selection-end-line="336" selection-end-column="25" />
+        <state relative-caret-position="693">
+          <caret line="1000" column="62" lean-forward="true" selection-start-line="1000" selection-start-column="62" selection-end-line="1000" selection-end-column="62" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
