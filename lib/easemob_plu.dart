@@ -334,7 +334,7 @@ Future<Map<String, EMConversation>> getAllConversations() async {
   iterable.forEach((key){
     mapConversation[key] = EMConversation.fromMap(result[key]);
   });
-  return result;
+  return mapConversation;
 }
 
 /// 添加会话更新监听

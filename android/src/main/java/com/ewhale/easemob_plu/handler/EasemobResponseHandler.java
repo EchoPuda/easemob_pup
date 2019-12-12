@@ -45,7 +45,7 @@ public class EasemobResponseHandler {
         channel.invokeMethod("loginListener",state);
     }
 
-    public static void onConversationGet(Map<String, Map<String, Object>> map) {
+    public static void onConversationGet(HashMap<String, HashMap<String, Object>> map) {
         channel.invokeMethod("conversationGetListener",map);
     }
 
