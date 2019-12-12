@@ -327,20 +327,24 @@ Future<int> getAllMsgCount(String username) async {
 }
 
 /// 获取所有会话
-Future getAllConversations() async {
+Future<Map<String, EMConversation>> getAllConversations() async {
   var result = await _channel.invokeMethod("getAllConversations");
-  return result;
-}
-
-/// 获取所有会话
-Future<Map<String, EMConversation>> addNewConversations() async {
-  var result = await _channel.invokeMethod("addNewConversations");
   Map<String, EMConversation> mapConversation = new Map();
   Iterable iterable = result.keys;
   iterable.forEach((key){
     mapConversation[key] = EMConversation.fromMap(result[key]);
   });
-  return mapConversation;
+  return result;
+}
+
+/// 添加会话更新监听
+Future addNewConversations() async {
+  await _channel.invokeMethod("addNewConversations");
+}
+
+/// 移除会话更新监听
+Future removeNewConversations() async {
+  await _channel.invokeMethod("removeNewConversations");
 }
 
 /// 删除会话

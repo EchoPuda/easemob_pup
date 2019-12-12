@@ -187,6 +187,8 @@ public class EasemobPluPlugin implements MethodCallHandler {
         EasemobHandler.getAllMessagesMoreFor(call,result);
     } else if (call.method.equals("addNewConversations")) {
         EasemobHandler.addNewConversations(call,result);
+    } else if (call.method.equals("removeNewConversations")) {
+        EasemobHandler.removeNewConversations(call,result);
     } else {
       result.notImplemented();
     }

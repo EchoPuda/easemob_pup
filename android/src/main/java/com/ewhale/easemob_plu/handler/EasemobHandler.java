@@ -1439,6 +1439,10 @@ public class EasemobHandler {
         EMClient.getInstance().chatManager().addConversationListener(emConversationListener);
     }
 
+    public static void removeNewConversations(MethodCall call, MethodChannel.Result result) {
+        EMClient.getInstance().chatManager().removeConversationListener(emConversationListener);
+    }
+
     private static EMConversationListener emConversationListener = new EMConversationListener() {
         @Override
         public void onCoversationUpdate() {
