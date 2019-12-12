@@ -70,11 +70,7 @@ public class EasemobPluPlugin implements MethodCallHandler {
     } else if (call.method.equals("getAllMsgCount")) {
       EasemobHandler.getAllMsgCount(call,result);
     } else if (call.method.equals("getAllConversations")) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            EasemobHandler.getAllConversations(call,result);
-        } else {
-            EasemobHandler.getAllConversationsNotSort(call,result);
-        }
+        EasemobHandler.getAllConversations(call,result);
     } else if (call.method.equals("deleteConversation")) {
       EasemobHandler.deleteConversation(call,result);
     } else if (call.method.equals("getAllContactsFromServer")) {
